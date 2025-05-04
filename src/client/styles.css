@@ -1,0 +1,44 @@
+:root {
+    --button-size: 100px;
+    --grid-gap: 10px;
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#deck-container {
+    background-color: var(--primary-color);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--grid-gap);
+}
+
+.deck-button {
+    width: var(--button-size);
+    height: var(--button-size);
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.deck-button:hover {
+    transform: scale(1.05);
+}
