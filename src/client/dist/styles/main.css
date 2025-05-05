@@ -1,0 +1,226 @@
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --success-color: #2ecc71;
+  --error-color: #e74c3c;
+  --background-color: #f5f6fa;
+  --text-color: #2c3e50;
+  --button-size: 100px;
+  --grid-gap: 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1200px;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+/* Authentication styles */
+#auth-container {
+  max-width: 400px;
+  text-align: center;
+}
+
+.pin-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#pin {
+  flex: 1;
+  padding: 10px;
+  font-size: 24px;
+  text-align: center;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  letter-spacing: 10px;
+}
+
+#auth-btn {
+  padding: 10px 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#auth-btn:hover {
+  background-color: #2980b9;
+}
+
+.error {
+  color: var(--error-color);
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Deck container styles */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+#disconnect-btn {
+  padding: 10px 20px;
+  background-color: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#disconnect-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Buttons grid */
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--button-size), 1fr));
+  gap: var(--grid-gap);
+  margin-bottom: 40px;
+}
+
+.deck-button {
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: var(--secondary-color);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+  padding: 10px;
+}
+
+.deck-button:hover {
+  transform: scale(1.05);
+  background-color: #2980b9;
+}
+
+.deck-button:active {
+  transform: scale(0.95);
+}
+
+.button-label {
+  font-size: 20px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* QR Code section */
+.qr-container {
+  border-top: 2px solid #eee;
+  padding-top: 30px;
+  text-align: center;
+}
+
+#qr-code {
+  margin: 20px 0;
+}
+
+.share-url {
+  font-size: 18px;
+  word-break: break-all;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  background-color: var(--success-color);
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification.error {
+  background-color: var(--error-color);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  :root {
+    --button-size: 80px;
+  }
+  
+  .deck-grid {
+    grid-template-columns: repeat(auto-fit, minmax(var(--button-size), 1fr));
+  }
+  
+  #header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .share-url {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --button-size: 60px;
+  }
+  
+  .button-label {
+    font-size: 16px;
+  }
+}

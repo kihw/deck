@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck - Stream Deck Virtuel</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="auth-container" class="container">
+        <h1>Deck</h1>
+        <p>Entrez le code PIN pour accéder à votre Stream Deck virtuel</p>
+        <div class="pin-input">
+            <input type="text" id="pin" maxlength="4" placeholder="____">
+            <button id="auth-btn">Connecter</button>
+        </div>
+        <p id="auth-error" class="error hidden">PIN incorrect</p>
+    </div>
+
+    <div id="deck-container" class="container hidden">
+        <div id="header">
+            <h2>Deck Virtuel</h2>
+            <button id="disconnect-btn">Déconnecter</button>
+        </div>
+        <div id="buttons-grid" class="deck-grid"></div>
+        <div id="qr-container" class="qr-container">
+            <h3>Partagez votre Deck</h3>
+            <div id="qr-code"></div>
+            <p id="share-url" class="share-url"></p>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
