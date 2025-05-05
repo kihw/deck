@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  deck:
+    build: .
+    container_name: deck-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - deck-network
+
+networks:
+  deck-network:
+    driver: bridge
