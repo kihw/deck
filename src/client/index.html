@@ -1,15 +1,89 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Deck - Virtual Stream Deck</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Deck Control Panel</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+        }
+        
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .deck-button {
+            width: 120px;
+            height: 120px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .deck-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-    <div id="deck-container">
-        <div id="buttons-grid"></div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/client.js"></script>
+    <div id="deck-container" class="deck-grid"></div>
+    
+    <script>
+        class DeckUI {
+            constructor() {
+                this.container = document.getElementById('deck-container');
+                this.renderButtons();
+            }
+
+            renderButtons() {
+                const buttons = [
+                    { 
+                        id: 'spotify-play', 
+                        label: 'Play/Pause', 
+                        plugin: 'spotify',
+                        action: 'play-pause'
+                    },
+                    { 
+                        id: 'spotify-next', 
+                        label: 'Next Track', 
+                        plugin: 'spotify', 
+                        action: 'next-track'
+                    }
+                ];
+
+                buttons.forEach(button => {
+                    const buttonEl = this.createButton(button);
+                    this.container.appendChild(buttonEl);
+                });
+            }
+
+            createButton(config) {
+                const button = document.createElement('button');
+                button.classList.add('deck-button');
+                button.textContent = config.label;
+                
+                button.onclick = () => {
+                    console.log(`Executing ${config.plugin}:${config.action}`);
+                };
+
+                return button;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new DeckUI();
+        });
+    </script>
 </body>
 </html>
