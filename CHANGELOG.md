@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.2] - 2025-05-05
+
+### Added
+- Icon Manager Plugin for centralized icon management
+- CLI tool for easier application management
+- Plugin template generator script
+- Directory setup script for easier installation
+- Comprehensive workflow for direct-to-main development
+- Tests for the Icon Manager plugin
+
+### Changed
+- Updated package.json with new scripts and dependencies
+- Improved start-up process with better directory structure
+- Enhanced documentation with workflow guidelines
+- Added GitHub workflow for automated testing on main branch
+
+### Fixed
+- Fixed dependency issues with fs-extra
+- Addressed branch cleanup requirements
+- Improved error handling in setup process
+
 ## [1.1.1] - 2025-05-05
 
 ### Changed
