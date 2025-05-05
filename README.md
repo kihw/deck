@@ -1,28 +1,53 @@
-# Deck - Advanced Plugin System 🔌
+# Deck - Stream Deck Virtuel Accessible à Distance 🚀
 
-## Overview
+[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/kihw/deck)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Deck now features a powerful, flexible, and extensible plugin system that allows dynamic loading and configuration of system integrations.
+## Présentation
 
-## Plugin System Architecture
+Deck est une application qui transforme n'importe quel appareil en Stream Deck virtuel accessible via une interface web. Contrôlez votre OBS, Spotify, Discord et plus encore, directement depuis votre téléphone ou tablette.
 
-### Key Features
-- Dynamic plugin loading
-- Configuration management
-- Lifecycle hooks
-- Type-safe plugin interface
-- Runtime plugin registration
+## 🚀 Démarrage Rapide
 
-### Plugin Structure
+**Linux/macOS :**
+```bash
+# Installation
+./install.sh
 
-A Deck plugin consists of:
-- Metadata
-- Actions
-- Initialization method
-- Optional unload method
-- Configuration validation
+# Démarrage
+./start.sh
+```
 
-#### Example Plugin Structure
+**Windows :**
+```
+# Installation
+install.bat
+
+# Démarrage
+start.bat
+```
+
+Une fois démarré, ouvrez l'URL affichée dans le terminal depuis n'importe quel appareil sur votre réseau.
+
+## ✨ Fonctionnalités
+
+- Interface web responsive accessible depuis n'importe quel appareil
+- Système de plugins extensible
+- Prise en charge d'OBS Studio, Spotify, Discord et plus
+- Authentification par code PIN
+- Personnalisation complète des boutons et actions
+
+## 🔌 Système de Plugins
+
+### Plugins inclus
+
+- **OBS Advanced** : Contrôle complet d'OBS Studio
+- **Spotify Control** : Gestion de la lecture et des playlists Spotify
+- **Discord Integration** : Envoi de messages et gestion de bot Discord
+- **Custom Notifications** : Système de notification multi-canaux
+- **System Monitor** : Surveillance des ressources système
+
+### Structure d'un Plugin
 
 ```typescript
 interface Plugin {
@@ -45,23 +70,32 @@ interface Plugin {
 }
 ```
 
-## Included Plugins
+## 🛠️ Configuration
 
-### 1. System Monitor Plugin
-- Real-time system resource tracking
-- CPU and Memory usage monitoring
-- Configurable alert thresholds
-- Event-based metrics reporting
+### Variables d'Environnement
 
-### 2. Discord Integration Plugin
-- Bot connection management
-- Message sending capabilities
-- Status updates
-- Channel interaction
+Créez un fichier `.env` dans le dossier racine :
+```bash
+# Server Configuration
+PORT=3000
+HOST=0.0.0.0
 
-## Configuration
+# Authentication
+PIN_LENGTH=4   # Longueur du code PIN
+PIN_CUSTOM=    # Code PIN personnalisé
 
-Plugins are configured via `plugins.default.json`:
+# OBS WebSocket
+OBS_ADDRESS=localhost:4444
+OBS_PASSWORD=
+
+# Spotify API
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+```
+
+### Configuration des Plugins
+
+Les plugins sont configurables via `src/config/plugins.default.json` :
 
 ```json
 {
@@ -71,98 +105,45 @@ Plugins are configured via `plugins.default.json`:
       "autoStart": false,
       "interval": 5000
     }
-  },
-  "discord-integration": {
-    "enabled": false,
-    "settings": {
-      "autoConnect": false
-    }
   }
 }
 ```
 
-## Environment Configuration
+## 📚 Documentation
 
-Use `.env` file to configure plugin behaviors:
+- [Guide d'Utilisation des Plugins](docs/PLUGIN_USAGE.md)
+- [Architecture du Système de Plugins](docs/PLUGIN_ARCHITECTURE.md)
+- [Développement de Plugins](docs/PLUGIN_DEVELOPMENT.md)
+- [Déploiement Docker](docs/DOCKER_DEPLOYMENT.md)
 
-```bash
-# System Monitor
-SYSTEM_MONITOR_INTERVAL=10000
-SYSTEM_MONITOR_ALERT_CPU_THRESHOLD=80
+## 🔄 Cycle de Vie des Plugins
 
-# Discord Integration
-DISCORD_BOT_TOKEN=your_token
-```
+1. Chargement et enregistrement
+2. Configuration et initialisation
+3. Exécution des actions
+4. Déchargement propre lors de l'arrêt
 
-## Creating a Custom Plugin
+## 🛡️ Sécurité
 
-1. Implement the `Plugin` interface
-2. Export the plugin as default
-3. Place in `src/plugins/`
+- Authentification par code PIN
+- Plugins en sandbox avec validation de configuration
+- Vérification des permissions à l'exécution
+- Mécanisme de chargement sécurisé
 
-```typescript
-const MyCustomPlugin: Plugin = {
-  metadata: {
-    id: 'my-plugin',
-    name: 'Custom Plugin',
-    version: '1.0.0'
-  },
-  
-  actions: {
-    customAction: {
-      async execute(context) {
-        // Plugin logic here
-      }
-    }
-  },
+## 📋 Feuille de Route
 
-  async initialize(config) {
-    // Initialization logic
-  },
+- [ ] Marketplace de plugins
+- [ ] Interface d'administration complète
+- [ ] Support multi-utilisateurs
+- [ ] Applications mobiles natives
 
-  async unload() {
-    // Cleanup logic
-  }
-};
+## 🤝 Contribuer
 
-export default MyCustomPlugin;
-```
+1. Suivez l'interface de plugin standard
+2. Écrivez des tests complets
+3. Documentez votre code et vos fonctionnalités
+4. Soumettez une pull request
 
-## Plugin Lifecycle
+## 📄 Licence
 
-1. Registration
-2. Configuration Loading
-3. Initialization
-4. Action Execution
-5. Optional Unloading
-
-## Security Considerations
-
-- Plugins are sandboxed
-- Configuration validation
-- Runtime permission checks
-- Secure plugin loading mechanism
-
-## Performance
-
-- Lazy loading
-- Minimal overhead
-- Configurable resource limits
-
-## Roadmap
-
-- [ ] Plugin marketplace
-- [ ] Enhanced security model
-- [ ] More built-in plugins
-- [ ] Community plugin support
-
-## Contributing
-
-1. Follow plugin interface
-2. Write comprehensive tests
-3. Document thoroughly
-4. Submit pull request
-
-## License
-
-MIT License
+[MIT License](LICENSE)
