@@ -7,6 +7,9 @@
   --text-color: #2c3e50;
   --button-size: 100px;
   --grid-gap: 10px;
+  --system-color: #9b59b6;
+  --media-color: #e74c3c;
+  --keyboard-color: #27ae60;
 }
 
 * {
@@ -137,6 +140,31 @@ h1, h2 {
 
 .deck-button:active {
   transform: scale(0.95);
+}
+
+/* Button variants by type */
+.deck-button[data-type="system"] {
+  background-color: var(--system-color);
+}
+
+.deck-button[data-type="system"]:hover {
+  background-color: #8e44ad;
+}
+
+.deck-button[data-type="media"] {
+  background-color: var(--media-color);
+}
+
+.deck-button[data-type="media"]:hover {
+  background-color: #c0392b;
+}
+
+.deck-button[data-type="keyboard"] {
+  background-color: var(--keyboard-color);
+}
+
+.deck-button[data-type="keyboard"]:hover {
+  background-color: #219a52;
 }
 
 .button-label {
