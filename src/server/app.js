@@ -52,7 +52,8 @@ class DeckServer {
     }));
     
     this.app.use(express.json({ limit: '1mb' }));
-    this.app.use(express.static(path.join(__dirname, '../client/dist')));
+    // Corrected path to serve static files
+    this.app.use(express.static(path.join(__dirname, '../../src/client/dist')));
   }
 
   setupRoutes() {
@@ -65,7 +66,7 @@ class DeckServer {
     
     // Route principale
     this.app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+      res.sendFile(path.join(__dirname, '../../src/client/dist/index.html'));
     });
     
     // 404 handler
