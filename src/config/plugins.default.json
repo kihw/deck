@@ -21,5 +21,18 @@
         "performanceWarnings": false
       }
     }
+  },
+  "spotify-control": {
+    "enabled": false,
+    "settings": {
+      "autoAuthenticate": false,
+      "defaultPlaylist": null,
+      "playbackPreferences": {
+        "shuffle": false,
+        "repeat": "off",
+        "defaultVolume": 50
+      },
+      "authorizedDevices": []
+    }
   }
 }
