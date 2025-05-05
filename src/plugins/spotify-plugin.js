@@ -1,26 +1,22 @@
 class SpotifyPlugin {
     constructor() {
-        this.id = 'spotify';
-        this.name = 'Spotify Plugin';
+        // Spotify client initialization would go here
     }
 
-    getActions() {
-        return [
-            {
-                id: 'play-pause',
-                name: 'Play/Pause',
-                execute: async () => {
-                    console.log('Spotify Play/Pause');
-                }
-            },
-            {
-                id: 'next-track',
-                name: 'Next Track',
-                execute: async () => {
-                    console.log('Spotify Next Track');
-                }
-            }
-        ];
+    initialize(server) {
+        console.log('Spotify Plugin Initialized');
+    }
+
+    registerActions(actionRegistry) {
+        actionRegistry.register('spotify.playPause', () => {
+            // Implement Spotify play/pause logic
+            console.log('Spotify Play/Pause Action');
+        });
+
+        actionRegistry.register('spotify.nextTrack', () => {
+            // Implement Spotify next track logic
+            console.log('Spotify Next Track Action');
+        });
     }
 }
 
