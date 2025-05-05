@@ -1,20 +1,29 @@
 {
   "name": "deck",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Web-based Stream Deck application",
   "main": "main.js",
+  "bin": {
+    "deck": "./cli.js"
+  },
   "scripts": {
-    "start": "node main.js",
+    "start": "node cli.js start",
     "dev": "nodemon main.js",
     "test": "jest",
     "lint": "eslint .",
-    "build": "tsc"
+    "build": "tsc",
+    "setup": "node cli.js setup",
+    "plugin:create": "node cli.js plugin create",
+    "plugin:list": "node cli.js plugin list",
+    "postinstall": "node scripts/setup-directories.js"
   },
   "dependencies": {
     "axios": "^1.4.0",
     "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "express-rate-limit": "^7.5.0",
+    "fs-extra": "^11.1.1",
     "nodemailer": "^6.9.3",
     "obs-websocket-js": "^5.0.0",
     "socket.io": "^4.3.2",
@@ -23,18 +32,34 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/fs-extra": "^11.0.1",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^20.2.3",
     "@types/nodemailer": "^6.4.8",
     "@types/spotify-web-api-node": "^5.0.7",
-    "jest": "^27.3.1",
+    "eslint": "^8.40.0",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.15",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.4"
   },
   "keywords": [
     "stream-deck",
     "web-application",
-    "automation"
+    "automation",
+    "obs",
+    "spotify",
+    "discord",
+    "remote-control"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kihw/deck.git"
+  },
   "author": "kihw",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
