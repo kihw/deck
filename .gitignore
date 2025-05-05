@@ -3,44 +3,150 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Build directories
-build/
-dist/
-out/
+lerna-debug.log*
+pnpm-debug.log*
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
+
+# Build directories
+build/
+dist/
+out/
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 # IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
 
 # OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Logs
-logs/
-*.log
-
-# Coverage
-coverage/
-.nyc_output/
-
-# Python
-__pycache__/
-*.py[cod]
-venv/
-.python-version
-
 # Database
-*.db
 *.sqlite
+*.sqlite3
+*.db
 
-# Config files
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+
+# Testing
+/coverage
+jest.config.local.js
+*.snap
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Documentation build
+docs/_build/
+site/
+
+# Mac
+__pycache__/
+.Python
+.pytest_cache/
+
+# Windows
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Local config files
 config/local.json
+config/local.js
+config/local.yaml
+config/local.yml
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Production files
+public/
+static/
+
+# Package lock files (choose one)
+# Uncomment the one you want to keep
+package-lock.json
+yarn.lock
+# pnpm-lock.yaml
+
+# Development files
+*.map.js
+*.map.css
+
+# JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.un~
+
+# Git
+*.orig
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Generated files
+generated/
+.generated/
+
+# PWA offline cache
+sw.js.map
+
+# Editor directories and files
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Project specific
+src/client/dist/icons/
+src/client/dist/screenshots/
+screenshots/
