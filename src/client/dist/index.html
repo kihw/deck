@@ -141,15 +141,6 @@
     <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="scripts/main.js"></script>
-    <script>
-        // Register service worker for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => console.log('SW registered'))
-                    .catch(err => console.log('SW registration failed'));
-            });
-        }
-    </script>
+    <script src="scripts/pwa.js"></script>
 </body>
 </html>
