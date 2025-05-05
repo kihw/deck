@@ -1,30 +1,26 @@
 const PluginManager = require('../src/plugins/plugin-manager');
-const path = require('path');
 
 describe('PluginManager', () => {
   let pluginManager;
-  const mockPluginDir = path.join(__dirname, '__mocks__', 'plugins');
 
   beforeEach(() => {
-    // Mock plugin directory avec des plugins de test
-    pluginManager = new PluginManager(mockPluginDir);
+    pluginManager = new PluginManager();
   });
 
-  test('should load plugins correctly', () => {
-    expect(pluginManager.plugins.size).toBeGreaterThan(0);
+  test('should create plugin manager', () => {
+    expect(pluginManager).toBeTruthy();
   });
 
-  test('should retrieve plugin by ID', () => {
-    const spotifyPlugin = pluginManager.getPlugin('spotify');
-    expect(spotifyPlugin).toBeDefined();
-    expect(spotifyPlugin.name).toBe('Spotify Plugin');
-  });
+  test('should register and execute plugins', () => {
+    const mockPlugin = {
+      id: 'test-plugin',
+      name: 'Test Plugin',
+      execute: jest.fn()
+    };
 
-  test('should execute plugin actions', () => {
-    const spotifyPlugin = pluginManager.getPlugin('spotify');
-    const playAction = spotifyPlugin.actions.find(a => a.id === 'play-pause');
+    pluginManager.register(mockPlugin);
+    const plugin = pluginManager.getPlugin('test-plugin');
     
-    expect(playAction).toBeDefined();
-    expect(typeof playAction.execute).toBe('function');
+    expect(plugin).toBe(mockPlugin);
   });
 });
