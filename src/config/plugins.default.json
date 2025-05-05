@@ -26,13 +26,32 @@
     "enabled": false,
     "settings": {
       "autoAuthenticate": false,
-      "defaultPlaylist": null,
-      "playbackPreferences": {
-        "shuffle": false,
-        "repeat": "off",
-        "defaultVolume": 50
+      "defaultPlaylist": null
+    }
+  },
+  "obs-advanced": {
+    "enabled": true,
+    "settings": {
+      "autoConnect": false,
+      "address": "localhost:4444",
+      "password": "",
+      "autoDetectScenes": {
+        "enabled": false,
+        "interval": 30000
       },
-      "authorizedDevices": []
+      "streamingPresets": {
+        "defaultScene": null,
+        "automaticTransitions": false
+      },
+      "notificationSettings": {
+        "streamStarted": true,
+        "streamStopped": true,
+        "sceneChanged": false,
+        "performanceWarnings": {
+          "droppedFrames": 10,
+          "lowFPS": 30
+        }
+      }
     }
   }
 }
