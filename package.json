@@ -1,6 +1,6 @@
 {
   "name": "deck",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Deck - Stream Deck Virtuel Accessible à Distance",
   "main": "src/index.js",
   "scripts": {
@@ -10,13 +10,16 @@
     "build": "npm run build-client && npm run build-server",
     "build-client": "webpack --config webpack.config.js",
     "build-server": "echo 'Building server...'",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "install-cli": "npm link",
+    "deck": "node src/index.js"
   },
   "keywords": [
     "stream-deck",
     "remote-control",
     "web-interface",
-    "streaming"
+    "streaming",
+    "virtual-deck"
   ],
   "author": "kihw",
   "license": "MIT",
@@ -39,5 +42,8 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "bin": {
+    "deck": "./src/index.js"
   }
 }
