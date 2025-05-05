@@ -1,25 +1,26 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0] - 2024-05-05
 
 ### Added
-- Dynamic plugin system with BasePlugin interface
-- PluginLoader for managing plugin lifecycle
-- ObsPlugin as an example of plugin integration
-- Support for OBS WebSocket actions via plugin system
+- Plugin System 🔌
+  - BasePlugin abstract class for standardized plugin development
+  - PluginLoader for dynamic plugin discovery and management
+  - Example ObsPlugin demonstrating WebSocket plugin integration
+- Support for dynamic action registration in plugins
+- Lifecycle methods for plugins (initialize, unload)
 
-### Changed
-- Refactored `src/index.js` to support dynamic plugin loading
-- Updated `package.json` to include `obs-websocket-js` dependency
+### Updated
+- Package dependencies to support plugin ecosystem
+- Project structure to accommodate plugin system
 
 ### Features
-- Plugins can now:
-  - Register custom actions
-  - Manage connection states
-  - Provide lifecycle methods (initialize, unload)
-  - Dynamically extend application functionality
+- Extensible architecture for third-party plugins
+- Dynamic loading of plugins at runtime
+- Centralized plugin management
 
 ## [1.0.0] - Initial Release
-- Initial project setup
-- Basic server and client infrastructure
-- Core streaming deck functionality
+
+### Initial Project Setup
+- Basic project structure
+- Core functionality implementation
