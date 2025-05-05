@@ -5,59 +5,125 @@ class DeckClient {
     this.buttons = [];
     this.reconnecting = false;
     this.actionQueue = [];
+    this.theme = 'light';
+    this.selectedButton = null;
+    
     this.initElements();
     this.initEvents();
-    this.connect();
+    this.setupPWA();
+    this.showLoadingSplash();
   }
 
   initElements() {
-    // Éléments d'authentification
+    // Loading
+    this.loadingSplash = document.getElementById('loading-splash');
+
+    // Auth elements
     this.authContainer = document.getElementById('auth-container');
-    this.pinInput = document.getElementById('pin');
+    this.pinInputs = [
+      document.getElementById('pin-1'),
+      document.getElementById('pin-2'),
+      document.getElementById('pin-3'),
+      document.getElementById('pin-4')
+    ];
     this.authBtn = document.getElementById('auth-btn');
     this.authError = document.getElementById('auth-error');
 
-    // Éléments principaux
+    // Deck elements
     this.deckContainer = document.getElementById('deck-container');
-    this.buttonsGrid = document.getElementById('buttons-grid');
+    this.deckGrid = document.getElementById('deck-grid');
+    this.connectionStatus = document.getElementById('connection-status');
     this.disconnectBtn = document.getElementById('disconnect-btn');
+    this.themeToggle = document.getElementById('theme-toggle');
     
-    // Éléments de partage
-    this.qrContainer = document.getElementById('qr-container');
-    this.shareUrl = document.getElementById('share-url');
+    // Share elements
+    this.quickShareBtn = document.getElementById('quick-share');
+    this.sharePanel = document.getElementById('share-panel');
+    this.qrCode = document.getElementById('qr-code');
+    this.shareUrlInput = document.getElementById('share-url');
+    this.copyUrlBtn = document.getElementById('copy-url');
+    this.closeShareBtn = document.getElementById('close-share');
     
-    // Élément de statut de connexion
-    this.statusIndicator = document.createElement('div');
-    this.statusIndicator.className = 'connection-status connected';
-    this.statusIndicator.textContent = 'Connecté';
-    this.deckContainer.appendChild(this.statusIndicator);
-  }
-
-  connect() {
-    this.socket = io();
-    this.initSocketEvents();
+    // Info panel elements
+    this.infoPanel = document.getElementById('info-panel');
+    this.closeInfoBtn = document.getElementById('close-info');
+    this.panelContent = this.infoPanel.querySelector('.panel-content');
+    
+    // PWA elements
+    this.installPrompt = document.getElementById('install-prompt');
+    this.installPwaBtn = document.getElementById('install-pwa');
+    this.dismissInstallBtn = document.getElementById('dismiss-install');
   }
 
   initEvents() {
-    // Authentification
-    this.authBtn.addEventListener('click', () => this.authenticate());
-    this.pinInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') this.authenticate();
+    // Loading splash
+    setTimeout(() => this.hideLoadingSplash(), 1000);
+
+    // PIN input events
+    this.pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => this.handlePinInput(e, index));
+      input.addEventListener('keydown', (e) => this.handlePinKeydown(e, index));
     });
 
-    // Déconnexion
+    // Auth events
+    this.authBtn.addEventListener('click', () => this.authenticate());
+
+    // Disconnect event
     this.disconnectBtn.addEventListener('click', () => this.disconnect());
+
+    // Theme toggle
+    this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+    // Share events
+    this.quickShareBtn.addEventListener('click', () => this.showSharePanel());
+    this.closeShareBtn.addEventListener('click', () => this.hideSharePanel());
+    this.copyUrlBtn.addEventListener('click', () => this.copyShareUrl());
+
+    // Info panel events
+    this.closeInfoBtn.addEventListener('click', () => this.hideInfoPanel());
+
+    // Click outside to close share panel
+    window.addEventListener('click', (e) => {
+      if (e.target === this.sharePanel) {
+        this.hideSharePanel();
+      }
+    });
+
+    // PWA install events
+    if (this.installPwaBtn) {
+      this.installPwaBtn.addEventListener('click', () => this.installPWA());
+    }
+    if (this.dismissInstallBtn) {
+      this.dismissInstallBtn.addEventListener('click', () => this.dismissInstallPrompt());
+    }
+  }
+
+  showLoadingSplash() {
+    this.loadingSplash.classList.remove('hidden');
+  }
+
+  hideLoadingSplash() {
+    this.loadingSplash.classList.add('hidden');
+    this.connect();
+  }
+
+  connect() {
+    this.socket = io({
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000
+    });
+    this.initSocketEvents();
   }
 
   initSocketEvents() {
-    // États de connexion
+    // Connection states
     this.socket.on('connect', () => {
       console.log('Connected to server');
-      this.statusIndicator.className = 'connection-status connected';
-      this.statusIndicator.textContent = 'Connecté';
+      this.updateConnectionStatus('connected');
       
       if (this.reconnecting && this.token) {
-        // Ré-authentification après reconnexion
         this.socket.emit('reauthenticate', this.token);
       }
       
@@ -66,43 +132,74 @@ class DeckClient {
     
     this.socket.on('disconnect', () => {
       console.log('Disconnected from server');
-      this.statusIndicator.className = 'connection-status disconnected';
-      this.statusIndicator.textContent = 'Déconnecté';
+      this.updateConnectionStatus('disconnected');
       this.reconnecting = true;
     });
     
     this.socket.on('reconnect', (attemptNumber) => {
       console.log(`Reconnected after ${attemptNumber} attempts`);
-      this.statusIndicator.className = 'connection-status connected';
-      this.statusIndicator.textContent = 'Connecté';
+      this.updateConnectionStatus('connected');
       this.reconnecting = false;
+    });
+    
+    this.socket.on('reconnecting', (attemptNumber) => {
+      console.log(`Attempting to reconnect... (${attemptNumber})`);
+      this.updateConnectionStatus('connecting');
     });
     
     this.socket.on('reconnect_error', (error) => {
       console.log('Reconnection error:', error);
-      this.statusIndicator.className = 'connection-status error';
-      this.statusIndicator.textContent = 'Erreur de connexion';
+      this.updateConnectionStatus('error');
     });
     
     this.socket.on('reconnect_failed', () => {
       console.log('Reconnection failed');
-      this.statusIndicator.className = 'connection-status error';
-      this.statusIndicator.textContent = 'Connexion échouée';
+      this.updateConnectionStatus('error');
       this.showNotification('Impossible de reconnecter au serveur', 'error');
     });
 
-    // Authentification
+    // Auth events
     this.socket.on('authenticated', (data) => this.onAuthenticated(data));
     this.socket.on('reauthenticated', (data) => this.onAuthenticated(data));
-    this.socket.on('authentication_failed', () => this.onAuthFailed());
+    this.socket.on('authentication_failed', (data) => this.onAuthFailed(data));
+    
+    // Button events
     this.socket.on('button_config', (config) => this.loadButtons(config));
     this.socket.on('action_executed', (data) => this.showNotification(`Action ${data.buttonId} exécutée`));
     this.socket.on('action_error', (data) => this.showNotification(`Erreur: ${data.error}`, 'error'));
   }
 
+  handlePinInput(e, index) {
+    const value = e.target.value;
+    
+    if (value && !isNaN(value)) {
+      if (index < this.pinInputs.length - 1) {
+        this.pinInputs[index + 1].focus();
+      }
+    }
+    
+    this.checkPinComplete();
+  }
+
+  handlePinKeydown(e, index) {
+    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+      this.pinInputs[index - 1].focus();
+    }
+    
+    if (e.key === 'Enter') {
+      this.authenticate();
+    }
+  }
+
+  checkPinComplete() {
+    const pin = this.pinInputs.map(input => input.value).join('');
+    this.authBtn.disabled = pin.length !== 4;
+  }
+
   authenticate() {
-    const pin = this.pinInput.value;
+    const pin = this.pinInputs.map(input => input.value).join('');
     if (pin.length === 4) {
+      this.authBtn.classList.add('btn-loading');
       this.socket.emit('authenticate', pin);
     }
   }
@@ -113,13 +210,21 @@ class DeckClient {
     this.deckContainer.classList.remove('hidden');
     this.generateQRCode();
     this.socket.emit('get_config', { token: this.token });
+    this.authBtn.classList.remove('btn-loading');
     this.reconnecting = false;
   }
 
-  onAuthFailed() {
+  onAuthFailed(data) {
+    this.authError.textContent = data?.error || 'PIN incorrect';
     this.authError.classList.remove('hidden');
-    this.pinInput.value = '';
-    this.pinInput.focus();
+    this.authBtn.classList.remove('btn-loading');
+    
+    // Reset PIN inputs
+    this.pinInputs.forEach(input => {
+      input.value = '';
+    });
+    this.pinInputs[0].focus();
+    this.checkPinComplete();
   }
 
   disconnect() {
@@ -127,22 +232,29 @@ class DeckClient {
     this.token = null;
     this.authContainer.classList.remove('hidden');
     this.deckContainer.classList.add('hidden');
+    this.authError.classList.add('hidden');
+    this.pinInputs.forEach(input => {
+      input.value = '';
+    });
+    this.pinInputs[0].focus();
   }
 
   loadButtons(config) {
-    this.buttonsGrid.innerHTML = '';
+    this.deckGrid.innerHTML = '';
     this.buttons = [];
 
-    config.forEach(buttonConfig => {
-      this.createButton(buttonConfig);
+    config.forEach((buttonConfig, index) => {
+      const delay = index * 50; // Stagger animation
+      this.createButton(buttonConfig, delay);
     });
   }
 
-  createButton(config) {
+  createButton(config, delay = 0) {
     const button = document.createElement('button');
     button.className = 'deck-button';
     button.dataset.buttonId = config.id;
-    button.dataset.type = config.type; // Add type data attribute for styling
+    button.dataset.type = config.type;
+    button.style.animationDelay = `${delay}ms`;
     
     const label = document.createElement('span');
     label.className = 'button-label';
@@ -151,17 +263,29 @@ class DeckClient {
     button.appendChild(label);
     
     button.addEventListener('click', () => this.triggerAction(config.id));
-    this.buttonsGrid.appendChild(button);
+    button.addEventListener('mousedown', () => this.showButtonInfo(config));
+    
+    this.deckGrid.appendChild(button);
     this.buttons.push(button);
   }
 
   triggerAction(buttonId) {
     if (this.socket.connected) {
       this.socket.emit('trigger_action', { buttonId, token: this.token });
+      this.animateButtonPress(buttonId);
     } else {
-      // Ajouter à la queue si déconnecté
       this.actionQueue.push({ buttonId, token: this.token });
       this.showNotification('Action mise en file d\'attente', 'info');
+    }
+  }
+  
+  animateButtonPress(buttonId) {
+    const button = document.querySelector(`[data-button-id="${buttonId}"]`);
+    if (button) {
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 100);
     }
   }
   
@@ -174,15 +298,82 @@ class DeckClient {
 
   generateQRCode() {
     const url = window.location.origin;
-    const qr = document.getElementById('qr-code');
-    
-    // Using Google QR API for simplicity
     const qrUrl = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(url)}`;
-    qr.innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
-    
-    this.shareUrl.textContent = url;
+    this.qrCode.innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
+    this.shareUrlInput.value = url;
   }
 
+  // Theme management
+  toggleTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.theme);
+    this.themeToggle.querySelector('.theme-icon').textContent = this.theme === 'light' ? '🌙' : '☀️';
+    localStorage.setItem('deck-theme', this.theme);
+  }
+
+  // Connection status
+  updateConnectionStatus(status) {
+    const statusEl = this.connectionStatus;
+    const statusText = statusEl.querySelector('.status-text');
+    
+    statusEl.className = `connection-status ${status}`;
+    
+    switch (status) {
+      case 'connected':
+        statusText.textContent = 'Connecté';
+        break;
+      case 'disconnected':
+        statusText.textContent = 'Déconnecté';
+        break;
+      case 'connecting':
+        statusText.textContent = 'Connexion...';
+        break;
+      case 'error':
+        statusText.textContent = 'Erreur de connexion';
+        break;
+    }
+  }
+
+  // Share panel
+  showSharePanel() {
+    this.sharePanel.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  hideSharePanel() {
+    this.sharePanel.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  copyShareUrl() {
+    this.shareUrlInput.select();
+    document.execCommand('copy');
+    this.copyUrlBtn.querySelector('.copy-icon').textContent = '✓';
+    this.showNotification('URL copiée dans le presse-papier', 'success');
+    
+    setTimeout(() => {
+      this.copyUrlBtn.querySelector('.copy-icon').textContent = '📋';
+    }, 2000);
+  }
+
+  // Info panel
+  showButtonInfo(config) {
+    this.selectedButton = config;
+    this.panelContent.innerHTML = `
+      <h4>Bouton: ${config.label}</h4>
+      <p><strong>Type:</strong> ${this.capitalize(config.type)}</p>
+      <p><strong>Action:</strong> ${config.action}</p>
+      ${config.description ? `<p><strong>Description:</strong> ${config.description}</p>` : ''}
+    `;
+    this.infoPanel.style.display = 'flex';
+  }
+
+  hideInfoPanel() {
+    this.infoPanel.style.display = 'none';
+    this.selectedButton = null;
+  }
+
+  // Notifications
   showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -191,11 +382,68 @@ class DeckClient {
     document.body.appendChild(notification);
     
     setTimeout(() => {
-      notification.remove();
+      notification.style.opacity = '0';
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
     }, 3000);
+  }
+
+  // PWA functionality
+  setupPWA() {
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      this.showInstallPrompt();
+    });
+
+    this.deferredPrompt = deferredPrompt;
+  }
+
+  showInstallPrompt() {
+    this.installPrompt.classList.remove('hidden');
+  }
+
+  hideInstallPrompt() {
+    this.installPrompt.classList.add('hidden');
+  }
+
+  installPWA() {
+    if (this.deferredPrompt) {
+      this.deferredPrompt.prompt();
+      this.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the PWA install prompt');
+        }
+        this.deferredPrompt = null;
+        this.hideInstallPrompt();
+      });
+    }
+  }
+
+  dismissInstallPrompt() {
+    this.hideInstallPrompt();
+  }
+
+  // Utility methods
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // Initialize theme from localStorage
+  initTheme() {
+    const savedTheme = localStorage.getItem('deck-theme');
+    if (savedTheme) {
+      this.theme = savedTheme;
+      document.documentElement.setAttribute('data-theme', this.theme);
+      this.themeToggle.querySelector('.theme-icon').textContent = this.theme === 'light' ? '🌙' : '☀️';
+    }
   }
 }
 
+// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-  new DeckClient();
+  window.deckClient = new DeckClient();
 });
