@@ -44,7 +44,7 @@ dirs.forEach(dir => {
 
 // Set executable permissions for scripts
 const scriptsToChmod = [
-  'src/index.js',
+  'main.js',
   'install.sh'
 ];
 
