@@ -1,34 +1,34 @@
-# Plugin Icon Manager
+# Icon Manager Plugin
 
-## 🖼️ Présentation
+## 🖼️ Overview
 
-Le plugin Icon Manager permet de gérer les icônes et images utilisées pour personnaliser les boutons de votre Stream Deck virtuel. Il offre un système complet pour télécharger, organiser et utiliser des icônes personnalisées dans vos boutons.
+The Icon Manager plugin provides a comprehensive system for managing icons used in your Deck buttons. It enables you to upload, organize, and retrieve icons to enhance the visual experience of your Stream Deck.
 
-## 🔧 Fonctionnalités
+## 🚀 Features
 
-- Téléchargement d'icônes personnalisées
-- Organisation en catégories
-- Récupération et utilisation des icônes dans les boutons
-- Gestion complète du cycle de vie des icônes
+- Upload custom icons in various formats (PNG, JPEG, GIF, SVG)
+- Organize icons into categories
+- Retrieve icons with optional base64 data
+- Delete unused icons
+- Create custom categories
 
-## 📂 Structure des Catégories
+## 📂 Directory Structure
 
-Le plugin organise les icônes en catégories pour simplifier leur gestion. Les catégories par défaut sont :
+Icons are stored in the `assets/icons` directory, organized by category:
 
-- **system** : Icônes système (volume, alimentation, etc.)
-- **streaming** : Icônes liées au streaming (OBS, transitions, etc.)
-- **media** : Icônes médias (lecture, pause, etc.)
-- **social** : Icônes des réseaux sociaux
-- **utilities** : Icônes d'utilitaires divers
-- **custom** : Icônes personnalisées ajoutées par l'utilisateur
+```
+assets/icons/
+├── system/       # System icons
+├── streaming/    # Streaming-related icons
+├── media/        # Media playback icons
+├── social/       # Social media icons
+├── utilities/    # Utility icons
+└── custom/       # User-uploaded icons
+```
 
-## 🛠️ Configuration
+## 🔧 Configuration
 
-### Configuration du Dossier d'Assets
-
-Par défaut, les icônes sont stockées dans le dossier `assets/icons` à la racine du projet. Vous pouvez modifier ce chemin via la configuration du plugin.
-
-### Configuration via `plugins.default.json`
+The Icon Manager plugin can be configured in your `src/config/plugins.default.json` file:
 
 ```json
 {
@@ -41,283 +41,217 @@ Par défaut, les icônes sont stockées dans le dossier `assets/icons` à la rac
 }
 ```
 
-## 🧩 Actions Disponibles
+## 📋 Available Actions
 
-### 1. Upload Icon
+### uploadIcon
 
-Télécharge une nouvelle icône.
+Uploads a new icon to the specified category.
 
-**Paramètres :**
-- `name` (string) : Nom de l'icône
-- `category` (string, optionnel) : Catégorie de l'icône (par défaut: "custom")
-- `data` (string) : Données de l'image en Base64
-- `mimeType` (string) : Type MIME de l'image (ex: "image/png")
+**Parameters:**
+- `name` (string): Name of the icon
+- `category` (string, optional): Category to store the icon in (defaults to "custom")
+- `data` (string): Base64-encoded image data (must start with "data:")
+- `mimeType` (string): MIME type of the image (e.g., "image/png")
 
-**Exemple :**
+**Example:**
 ```javascript
-const iconData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA...";
-
-await IconManagerPlugin.actions.uploadIcon.execute({
-  name: "Mon Icône",
-  category: "custom",
-  data: iconData,
-  mimeType: "image/png"
+await pluginManager.executePluginAction('icon-manager', 'uploadIcon', {
+  name: 'My Custom Icon',
+  category: 'streaming',
+  data: 'data:image/png;base64,...',
+  mimeType: 'image/png'
 });
 ```
 
-### 2. Get Icon
+### getIcon
 
-Récupère les détails d'une icône par son ID.
+Retrieves information about an icon by its ID.
 
-**Paramètres :**
-- `iconId` (string) : ID de l'icône
-- `includeData` (boolean, optionnel) : Inclure les données Base64 (par défaut: false)
+**Parameters:**
+- `iconId` (string): ID of the icon
+- `includeData` (boolean, optional): Whether to include base64 data (defaults to false)
 
-**Exemple :**
+**Example:**
 ```javascript
-const icon = await IconManagerPlugin.actions.getIcon.execute({
-  iconId: "123456abcdef",
+const icon = await pluginManager.executePluginAction('icon-manager', 'getIcon', {
+  iconId: 'abc123def456',
   includeData: true
 });
 
-console.log(icon.name);
-console.log(icon.base64); // Si includeData est true
+console.log(icon.name);      // "My Custom Icon"
+console.log(icon.category);  // "streaming"
+console.log(icon.base64);    // "data:image/png;base64,..."
 ```
 
-### 3. Delete Icon
+### deleteIcon
 
-Supprime une icône par son ID.
+Deletes an icon by its ID.
 
-**Paramètres :**
-- `iconId` (string) : ID de l'icône
+**Parameters:**
+- `iconId` (string): ID of the icon to delete
 
-**Exemple :**
+**Example:**
 ```javascript
-await IconManagerPlugin.actions.deleteIcon.execute({
-  iconId: "123456abcdef"
+await pluginManager.executePluginAction('icon-manager', 'deleteIcon', {
+  iconId: 'abc123def456'
 });
 ```
 
-### 4. List Icons
+### listIcons
 
-Liste toutes les icônes disponibles, avec filtrage optionnel par catégorie.
+Lists available icons, optionally filtered by category.
 
-**Paramètres :**
-- `category` (string, optionnel) : Filtrer par catégorie
+**Parameters:**
+- `category` (string, optional): Category to filter by
 
-**Exemple :**
+**Example:**
 ```javascript
-// Toutes les icônes
-const allIcons = await IconManagerPlugin.actions.listIcons.execute();
+// Get all icons
+const allIcons = await pluginManager.executePluginAction('icon-manager', 'listIcons');
 
-// Icônes d'une catégorie spécifique
-const streamingIcons = await IconManagerPlugin.actions.listIcons.execute({
-  category: "streaming"
+// Get icons from a specific category
+const streamingIcons = await pluginManager.executePluginAction('icon-manager', 'listIcons', {
+  category: 'streaming'
 });
 ```
 
-### 5. Get Categories
+### getCategories
 
-Récupère toutes les catégories d'icônes disponibles.
+Gets all available icon categories.
 
-**Paramètres :** Aucun
+**Parameters:** None
 
-**Exemple :**
+**Example:**
 ```javascript
-const categories = await IconManagerPlugin.actions.getCategories.execute();
-console.log(categories); // ["system", "streaming", "media", ...]
+const categories = await pluginManager.executePluginAction('icon-manager', 'getCategories');
+console.log(categories);  // ["system", "streaming", "media", "social", "utilities", "custom"]
 ```
 
-### 6. Create Category
+### createCategory
 
-Crée une nouvelle catégorie d'icônes.
+Creates a new icon category.
 
-**Paramètres :**
-- `category` (string) : Nom de la nouvelle catégorie
+**Parameters:**
+- `category` (string): Name of the category to create
 
-**Exemple :**
+**Example:**
 ```javascript
-await IconManagerPlugin.actions.createCategory.execute({
-  category: "twitch"
+await pluginManager.executePluginAction('icon-manager', 'createCategory', {
+  category: 'gaming'
 });
 ```
 
-## 💻 Exemple d'Utilisation
+## 🖥️ Integration with UI
 
-### 1. Téléchargement d'une Icône
+### Icon Selector Component
+
+The Icon Manager plugin is designed to work with the `IconSelector` component in the client interface. This component provides a user-friendly way to browse and select icons.
 
 ```javascript
-// Fonction pour convertir une image en Base64
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+// Example of using IconSelector in a client-side script
+const iconSelector = new IconSelector(socket, 'icon-selector-container', {
+  onSelect: (icon) => {
+    console.log(`Selected icon: ${icon.id}`);
+    updateButtonIcon(icon.id, icon.base64);
+  }
+});
+```
+
+### Upload Flow
+
+1. User clicks "Upload Icon" in the interface
+2. Browser opens a file picker
+3. User selects an image file
+4. Client converts the file to base64
+5. Client calls `uploadIcon` action
+6. Icon Manager stores the icon in the appropriate category
+7. Icon becomes available in the selector
+
+## 🛠️ Example Use Cases
+
+### Creating a Button with a Custom Icon
+
+```javascript
+// First, upload an icon
+const uploadResult = await pluginManager.executePluginAction('icon-manager', 'uploadIcon', {
+  name: 'Start Stream Button',
+  category: 'streaming',
+  data: imageBase64Data,
+  mimeType: 'image/png'
+});
+
+// Then create a button using this icon
+const button = {
+  id: 'start-stream',
+  label: 'Start Stream',
+  iconId: uploadResult.icon.id,
+  action: 'obs-advanced.toggleStream'
+};
+
+// Register the button
+buttonManager.registerButton(button);
+```
+
+### Creating a Theme with Consistent Icons
+
+```javascript
+// Create a new category for the theme
+await pluginManager.executePluginAction('icon-manager', 'createCategory', {
+  category: 'dark-theme'
+});
+
+// Upload themed icons
+for (const iconData of themeIcons) {
+  await pluginManager.executePluginAction('icon-manager', 'uploadIcon', {
+    name: iconData.name,
+    category: 'dark-theme',
+    data: iconData.base64,
+    mimeType: iconData.mimeType
   });
 }
 
-// Téléchargement d'une icône depuis l'interface utilisateur
-async function uploadIcon(file) {
-  try {
-    const base64Data = await fileToBase64(file);
-    
-    const result = await pluginManager.executePluginAction(
-      'icon-manager', 
-      'uploadIcon', 
-      {
-        name: file.name.split('.')[0],
-        category: 'custom',
-        data: base64Data,
-        mimeType: file.type
-      }
-    );
-    
-    console.log(`Icône téléchargée avec succès. ID: ${result.icon.id}`);
-    return result.icon;
-  } catch (error) {
-    console.error('Échec du téléchargement de l\'icône:', error);
-    throw error;
-  }
-}
+// Get all icons from the theme
+const themeIcons = await pluginManager.executePluginAction('icon-manager', 'listIcons', {
+  category: 'dark-theme'
+});
+
+// Apply them to buttons
+// ...
 ```
 
-### 2. Utilisation d'une Icône dans un Bouton
+## 🧩 Extending the Icon Manager
 
-```javascript
-// Récupération d'une icône et création d'un bouton
-async function createButtonWithIcon(iconId, label, action) {
-  try {
-    // Récupérer l'icône avec ses données
-    const icon = await pluginManager.executePluginAction(
-      'icon-manager', 
-      'getIcon', 
-      {
-        iconId,
-        includeData: true
-      }
-    );
-    
-    // Créer un bouton avec cette icône
-    const button = {
-      id: `button-${Date.now()}`,
-      label,
-      iconData: icon.base64,
-      action
-    };
-    
-    // Ajouter le bouton à l'interface
-    addButtonToInterface(button);
-    
-    return button;
-  } catch (error) {
-    console.error('Échec de la création du bouton:', error);
-    throw error;
-  }
-}
-```
+The Icon Manager plugin is designed to be extended with additional functionality. Here are some ideas:
 
-## 🌐 Intégration avec l'Interface Utilisateur
+- Add support for icon resizing
+- Implement icon search functionality
+- Add color filters and effects
+- Create theme packs with predefined icons
+- Add import/export functionality for icon sets
 
-### Affichage d'un Sélecteur d'Icônes
+## 🔍 Troubleshooting
 
-```javascript
-// Récupération et affichage des icônes par catégorie
-async function displayIconSelector() {
-  try {
-    // Récupérer les catégories
-    const { categories } = await pluginManager.executePluginAction(
-      'icon-manager', 
-      'getCategories'
-    );
-    
-    // Créer les onglets de catégories
-    const tabContainer = document.getElementById('icon-category-tabs');
-    tabContainer.innerHTML = '';
-    
-    categories.forEach(category => {
-      const tab = document.createElement('button');
-      tab.textContent = category;
-      tab.className = 'icon-category-tab';
-      tab.onclick = () => loadIconsByCategory(category);
-      tabContainer.appendChild(tab);
-    });
-    
-    // Charger les icônes de la première catégorie par défaut
-    if (categories.length > 0) {
-      loadIconsByCategory(categories[0]);
-    }
-  } catch (error) {
-    console.error('Échec du chargement des catégories d\'icônes:', error);
-  }
-}
+### Cannot Upload Icons
 
-// Chargement des icônes par catégorie
-async function loadIconsByCategory(category) {
-  try {
-    const { icons } = await pluginManager.executePluginAction(
-      'icon-manager', 
-      'listIcons', 
-      { category }
-    );
-    
-    const iconGrid = document.getElementById('icon-grid');
-    iconGrid.innerHTML = '';
-    
-    icons.forEach(icon => {
-      const iconElement = document.createElement('div');
-      iconElement.className = 'icon-item';
-      iconElement.dataset.iconId = icon.id;
-      
-      // Charger l'icône individuelle pour l'affichage
-      loadIconPreview(iconElement, icon.id);
-      
-      iconElement.onclick = () => selectIcon(icon.id);
-      iconGrid.appendChild(iconElement);
-    });
-  } catch (error) {
-    console.error(`Échec du chargement des icônes pour la catégorie ${category}:`, error);
-  }
-}
+- Ensure the `assets/icons` directory exists and is writable
+- Check that the base64 data is properly formatted (should start with "data:")
+- Verify that the MIME type is supported
 
-// Chargement de l'aperçu d'une icône
-async function loadIconPreview(element, iconId) {
-  try {
-    const icon = await pluginManager.executePluginAction(
-      'icon-manager', 
-      'getIcon', 
-      {
-        iconId,
-        includeData: true
-      }
-    );
-    
-    const img = document.createElement('img');
-    img.src = icon.base64;
-    img.alt = icon.name;
-    img.title = icon.name;
-    
-    element.appendChild(img);
-  } catch (error) {
-    console.error(`Échec du chargement de l'aperçu de l'icône ${iconId}:`, error);
-  }
-}
-```
+### Icons Not Appearing
 
-## 📝 Notes de Développement
+- Check that the category exists
+- Ensure the icon ID is correct
+- Verify that the `includeData` parameter is set to `true` when needed
 
-- Assurez-vous que le dossier d'assets est accessible en écriture par l'application
-- Les icônes sont identifiées par un ID unique généré à partir du nom et du timestamp
-- Le plugin supporte les formats d'image courants : PNG, JPEG, SVG, GIF et WebP
+### Permission Issues
 
-## 🛡️ Sécurité
+- On Linux/macOS, make sure the directory permissions are set correctly:
+  ```bash
+  chmod -R 755 ./assets/icons
+  ```
 
-- Vérifiez que les fichiers téléchargés sont bien des images pour éviter les risques de sécurité
-- Limitez la taille des images téléchargées pour éviter les problèmes de performance
-- Validez les noms de fichiers pour éviter les problèmes de chemin
+## 📚 Additional Resources
 
-## ⚠️ Limitations Connues
-
-- Le plugin ne gère pas la redimensionnement automatique des images
-- Les fichiers SVG animés peuvent ne pas fonctionner correctement sur certains navigateurs
-- L'importation en masse d'icônes n'est pas supportée actuellement
+- [MDN Web Docs: Working with Files](https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications)
+- [Base64 Image Conversion](https://www.base64-image.de/)
+- [Icon Design Guidelines](https://material.io/design/iconography/system-icons.html)
