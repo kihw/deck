@@ -27,8 +27,8 @@ class DeckApplication {
       // Initialisation des plugins
       await this.pluginLoader.initializePlugins(this.server);
       
-      // Enregistrement des actions des plugins
-      this.pluginLoader.registerPluginActions(this.server.actionRegistry);
+      // Enregistrement des actions des plugins dans ActionManager
+      this.pluginLoader.registerPluginActions(this.server.actionManager);
       
       this.isRunning = true;
       this.logger.info('✅ Deck application initialized successfully');
@@ -70,7 +70,7 @@ class DeckApplication {
         await this.pluginLoader.unloadPlugins();
       }
       
-      if (this.server) {
+      if (this.server && typeof this.server.stop === 'function') {
         await this.server.stop();
       }
       
