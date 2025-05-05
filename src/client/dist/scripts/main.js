@@ -1,10 +1,13 @@
 class DeckClient {
   constructor() {
-    this.socket = io();
+    this.socket = null;
     this.token = null;
     this.buttons = [];
+    this.reconnecting = false;
+    this.actionQueue = [];
     this.initElements();
     this.initEvents();
+    this.connect();
   }
 
   initElements() {
@@ -22,6 +25,17 @@ class DeckClient {
     // Éléments de partage
     this.qrContainer = document.getElementById('qr-container');
     this.shareUrl = document.getElementById('share-url');
+    
+    // Élément de statut de connexion
+    this.statusIndicator = document.createElement('div');
+    this.statusIndicator.className = 'connection-status connected';
+    this.statusIndicator.textContent = 'Connecté';
+    this.deckContainer.appendChild(this.statusIndicator);
+  }
+
+  connect() {
+    this.socket = io();
+    this.initSocketEvents();
   }
 
   initEvents() {
@@ -33,9 +47,53 @@ class DeckClient {
 
     // Déconnexion
     this.disconnectBtn.addEventListener('click', () => this.disconnect());
+  }
 
-    // WebSocket events
+  initSocketEvents() {
+    // États de connexion
+    this.socket.on('connect', () => {
+      console.log('Connected to server');
+      this.statusIndicator.className = 'connection-status connected';
+      this.statusIndicator.textContent = 'Connecté';
+      
+      if (this.reconnecting && this.token) {
+        // Ré-authentification après reconnexion
+        this.socket.emit('reauthenticate', this.token);
+      }
+      
+      this.processActionQueue();
+    });
+    
+    this.socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      this.statusIndicator.className = 'connection-status disconnected';
+      this.statusIndicator.textContent = 'Déconnecté';
+      this.reconnecting = true;
+    });
+    
+    this.socket.on('reconnect', (attemptNumber) => {
+      console.log(`Reconnected after ${attemptNumber} attempts`);
+      this.statusIndicator.className = 'connection-status connected';
+      this.statusIndicator.textContent = 'Connecté';
+      this.reconnecting = false;
+    });
+    
+    this.socket.on('reconnect_error', (error) => {
+      console.log('Reconnection error:', error);
+      this.statusIndicator.className = 'connection-status error';
+      this.statusIndicator.textContent = 'Erreur de connexion';
+    });
+    
+    this.socket.on('reconnect_failed', () => {
+      console.log('Reconnection failed');
+      this.statusIndicator.className = 'connection-status error';
+      this.statusIndicator.textContent = 'Connexion échouée';
+      this.showNotification('Impossible de reconnecter au serveur', 'error');
+    });
+
+    // Authentification
     this.socket.on('authenticated', (data) => this.onAuthenticated(data));
+    this.socket.on('reauthenticated', (data) => this.onAuthenticated(data));
     this.socket.on('authentication_failed', () => this.onAuthFailed());
     this.socket.on('button_config', (config) => this.loadButtons(config));
     this.socket.on('action_executed', (data) => this.showNotification(`Action ${data.buttonId} exécutée`));
@@ -55,6 +113,7 @@ class DeckClient {
     this.deckContainer.classList.remove('hidden');
     this.generateQRCode();
     this.socket.emit('get_config', { token: this.token });
+    this.reconnecting = false;
   }
 
   onAuthFailed() {
@@ -96,7 +155,20 @@ class DeckClient {
   }
 
   triggerAction(buttonId) {
-    this.socket.emit('trigger_action', { buttonId, token: this.token });
+    if (this.socket.connected) {
+      this.socket.emit('trigger_action', { buttonId, token: this.token });
+    } else {
+      // Ajouter à la queue si déconnecté
+      this.actionQueue.push({ buttonId, token: this.token });
+      this.showNotification('Action mise en file d\'attente', 'info');
+    }
+  }
+  
+  processActionQueue() {
+    while (this.actionQueue.length > 0 && this.socket.connected) {
+      const action = this.actionQueue.shift();
+      this.socket.emit('trigger_action', action);
+    }
   }
 
   generateQRCode() {

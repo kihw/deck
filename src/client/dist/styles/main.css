@@ -7,6 +7,7 @@
   --text-color: #2c3e50;
   --button-size: 100px;
   --grid-gap: 10px;
+  --warning-color: #f39c12;
 }
 
 * {
@@ -107,6 +108,32 @@ h1, h2 {
   background-color: #c0392b;
 }
 
+/* Connection status */
+.connection-status {
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.connection-status.connected {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.connection-status.disconnected {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.connection-status.error {
+  background-color: var(--error-color);
+  color: white;
+}
+
 /* Buttons grid */
 .deck-grid {
   display: grid;
@@ -181,6 +208,10 @@ h1, h2 {
 
 .notification.error {
   background-color: var(--error-color);
+}
+
+.notification.info {
+  background-color: var(--secondary-color);
 }
 
 @keyframes slideIn {

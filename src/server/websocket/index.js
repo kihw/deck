@@ -18,7 +18,20 @@ class WebSocket {
           const token = this.authService.generateToken();
           socket.token = token;
           socket.authenticated = true;
+          this.authService.addConnection(token, socket.id);
           socket.emit('authenticated', { token, success: true });
+          this.broadcastButtonConfig(socket);
+        } else {
+          socket.emit('authentication_failed', { success: false });
+        }
+      });
+      
+      // Ré-authentification après déconnexion
+      socket.on('reauthenticate', (token) => {
+        if (this.authService.verifyToken(token)) {
+          socket.token = token;
+          socket.authenticated = true;
+          socket.emit('reauthenticated', { token, success: true });
           this.broadcastButtonConfig(socket);
         } else {
           socket.emit('authentication_failed', { success: false });
@@ -27,7 +40,7 @@ class WebSocket {
 
       // Vérification du token pour les autres événements
       socket.use((packet, next) => {
-        if (packet[0] === 'authenticate') return next();
+        if (packet[0] === 'authenticate' || packet[0] === 'reauthenticate') return next();
         
         const token = packet[1]?.token;
         if (this.authService.verifyToken(token)) {
@@ -60,8 +73,17 @@ class WebSocket {
 
       socket.on('disconnect', () => {
         console.log(`Connection lost: ${socket.id}`);
-        this.authService.removeToken(socket.token);
+        if (socket.token) {
+          this.authService.removeConnection(socket.token);
+        }
       });
+      
+      // Debug: Log all events
+      if (process.env.NODE_ENV === 'development') {
+        socket.onAny((event, ...args) => {
+          console.log(`[${socket.id}] ${event}:`, args);
+        });
+      }
     });
   }
 
