@@ -1,9 +1,10 @@
-const OBSWebSocket = require('obs-websocket-js').default; // Ajout de .default
+const BasePlugin = require('./BasePlugin');
+const OBSWebSocket = require('obs-websocket-js').default;
 
-class ObsPlugin {
+class ObsPlugin extends BasePlugin {
     constructor() {
+        super();
         this.obs = new OBSWebSocket();
-        this.connected = false;
     }
 
     async initialize(server) {
@@ -21,10 +22,9 @@ class ObsPlugin {
     }
 
     registerActions(actionRegistry) {
-        if (!this.connected) {
-            console.warn('OBS Plugin non connecté. Impossible d\'enregistrer les actions.');
-            return;
-        }
+        super.registerActions(actionRegistry);
+        
+        if (!this.connected) return;
 
         actionRegistry.register('obs.toggleStream', async () => {
             try {
