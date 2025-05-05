@@ -5,17 +5,19 @@ const PluginLoader = require('./plugins/PluginLoader');
 // Create and initialize the plugin loader
 const pluginLoader = new PluginLoader(path.join(__dirname, 'plugins'));
 
-// Create and start the server
+// Create the server
 const server = new DeckServer();
 
 async function startApplication() {
   try {
-    // Load plugins before starting the server
-    await pluginLoader.loadPlugins();
+    // Load plugins first
+    pluginLoader.loadPlugins();
 
-    // Register plugin actions with the server
-    const pluginActions = pluginLoader.registerPluginActions();
-    server.registerActions(pluginActions);
+    // Initialize plugins with the server
+    await pluginLoader.initializePlugins(server);
+
+    // Register plugin actions
+    pluginLoader.registerPluginActions(server.actionRegistry);
 
     // Start the server
     server.start();
