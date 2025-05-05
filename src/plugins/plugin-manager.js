@@ -1,45 +1,57 @@
+const fs = require('fs');
+const path = require('path');
+
 class PluginManager {
-    constructor(pluginDir) {
-        this.pluginDir = pluginDir;
-        this.plugins = new Map();
-        this.loadPlugins();
+    constructor(pluginPath = path.join(__dirname)) {
+        this.pluginPath = pluginPath;
+        this.plugins = [];
     }
 
     loadPlugins() {
-        const pluginFiles = require('fs').readdirSync(this.pluginDir)
-            .filter(file => file.endsWith('.js'));
+        try {
+            const pluginFiles = fs.readdirSync(this.pluginPath)
+                .filter(file => file.endsWith('Plugin.js') || file.endsWith('.js'));
 
-        pluginFiles.forEach(file => {
-            try {
-                const Plugin = require(require('path').join(this.pluginDir, file));
-                const pluginInstance = new Plugin();
-                this.registerPlugin(pluginInstance);
-            } catch (error) {
-                console.error(`Plugin load error: ${file}`, error);
-            }
-        });
-    }
-
-    registerPlugin(plugin) {
-        if (!plugin.id || !plugin.name) {
-            throw new Error('Invalid plugin structure');
+            pluginFiles.forEach(file => {
+                try {
+                    const fullPath = path.join(this.pluginPath, file);
+                    const PluginClass = require(fullPath);
+                    const plugin = new PluginClass();
+                    this.plugins.push(plugin);
+                    console.log(`Loaded plugin: ${file}`);
+                } catch (pluginLoadError) {
+                    console.error(`Failed to load plugin ${file}:`, pluginLoadError);
+                }
+            });
+        } catch (error) {
+            console.error('Plugin loading error:', error);
         }
-
-        this.plugins.set(plugin.id, {
-            instance: plugin,
-            actions: plugin.getActions ? plugin.getActions() : [],
-            triggers: plugin.getTriggers ? plugin.getTriggers() : []
-        });
+        
+        return this.plugins;
     }
 
-    executePluginAction(pluginId, actionId, context) {
-        const plugin = this.plugins.get(pluginId);
-        if (!plugin) throw new Error(`Plugin ${pluginId} not found`);
+    async initializePlugins(server) {
+        for (const plugin of this.plugins) {
+            if (typeof plugin.initialize === 'function') {
+                try {
+                    await plugin.initialize(server);
+                } catch (error) {
+                    console.error(`Plugin initialization error:`, error);
+                }
+            }
+        }
+    }
 
-        const action = plugin.actions.find(a => a.id === actionId);
-        if (!action) throw new Error(`Action ${actionId} not found`);
-
-        return action.execute(context);
+    registerPluginActions(actionRegistry) {
+        for (const plugin of this.plugins) {
+            if (typeof plugin.registerActions === 'function') {
+                try {
+                    plugin.registerActions(actionRegistry);
+                } catch (error) {
+                    console.error(`Plugin action registration error:`, error);
+                }
+            }
+        }
     }
 }
 
