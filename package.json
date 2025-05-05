@@ -1,6 +1,6 @@
 {
   "name": "deck",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Web-based Stream Deck application",
   "main": "main.js",
   "bin": {
@@ -15,6 +15,7 @@
     "setup": "node cli.js setup",
     "plugin:create": "node cli.js plugin create",
     "plugin:list": "node cli.js plugin list",
+    "plugin:manage": "node cli.js plugins",
     "postinstall": "node scripts/setup-directories.js"
   },
   "dependencies": {
