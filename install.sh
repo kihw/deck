@@ -29,7 +29,7 @@ mkdir -p src/client/dist/scripts
 mkdir -p src/client/dist/styles
 
 # Set executable permissions
-chmod +x src/index.js
+chmod +x main.js
 
 # Create global command
 echo "🔗 Creating global command..."
