@@ -1,0 +1,113 @@
+# Deck - Virtual Stream Deck Requirements
+
+## System Requirements
+
+### Minimum System Requirements:
+- Node.js >= 14.0.0 (LTS recommended)
+- npm >= 6.0.0
+- Operating System: Windows 10/11, macOS 11+, Linux (Ubuntu 20.04+ / Debian 11+ / Fedora 34+)
+- RAM: 512MB minimum, 1GB recommended
+- Disk Space: 100MB for installation
+- Network: Local network connectivity
+
+### System Dependencies (Platform-specific):
+
+#### Windows:
+- PowerShell 5.0+
+- Optional: NirCmd (for enhanced audio controls)
+  https://www.nirsoft.net/utils/nircmd.html
+
+#### macOS:
+- Terminal access
+- Xcode Command Line Tools: xcode-select --install
+- Optional: AppleScript support
+
+#### Linux:
+- xdotool: sudo apt-get install xdotool (Ubuntu/Debian)
+           sudo dnf install xdotool (Fedora)
+- gnome-screensaver-command: Usually pre-installed with GNOME
+- amixer: sudo apt-get install alsa-utils (Ubuntu/Debian)
+         sudo dnf install alsa-utils (Fedora)
+- dbus-send: Usually pre-installed
+
+## NPM Dependencies (Production):
+
+- express@^4.18.2
+- socket.io@^4.6.1
+- cors@^2.8.5
+- dotenv@^16.0.3
+- express-rate-limit@^6.7.0
+
+## NPM Dependencies (Development):
+
+- nodemon@^2.0.22
+- eslint@^8.38.0
+- jest@^29.5.0
+- webpack@^5.81.0
+- webpack-cli@^5.0.1
+
+## Browser Requirements (Client):
+
+- Modern web browser with WebSocket support:
+  - Chrome 90+
+  - Firefox 88+
+  - Safari 14+
+  - Edge 90+
+- JavaScript enabled
+- Local network access to server IP
+
+## Network Requirements:
+
+- Local network connectivity
+- Port 3000 available (default, configurable)
+- Firewall rules allowing incoming connections on chosen port
+- Browser support for WebSocket protocol
+- CORS policies allowing connections from local network IPs
+
+## Optional Components:
+
+### Media Control Support:
+- Windows: Windows Media Player or compatible media application
+- macOS: iTunes/Music app
+- Linux: MPRIS-compatible media player (VLC, Spotify, etc.)
+
+### Screenshot Requirements:
+- Windows: Built-in PowerShell capabilities
+- macOS: Built-in screencapture utility
+- Linux: scrot package
+
+## Installation Commands:
+
+### For quick setup, run:
+```bash
+npm install
+```
+
+### For production build:
+```bash
+npm run build
+```
+
+### For development:
+```bash
+npm run dev
+```
+
+## Troubleshooting:
+
+If you encounter issues with specific actions:
+
+1. Ensure all system dependencies are installed for your platform
+2. Check that firewall is not blocking the application
+3. Verify Node.js version compatibility
+4. For Linux users: Ensure X11 session for graphical actions
+5. For media controls: Check if media player supports system controls
+
+## Security Note:
+
+This application is designed for local network use only. 
+Do not expose it to the internet without proper security measures.
+
+## License:
+
+MIT License - See LICENSE file for details
