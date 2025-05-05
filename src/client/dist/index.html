@@ -68,11 +68,120 @@
             </div>
         </header>
 
+        <!-- Navigation -->
+        <nav class="deck-nav">
+            <div class="page-tabs" id="page-tabs">
+                <button class="page-tab active" data-page="1">Page 1</button>
+                <button class="page-tab" data-page="2">Page 2</button>
+                <button class="page-tab" data-page="3">Page 3</button>
+                <button id="add-page" class="page-tab add-tab">+</button>
+            </div>
+            <div class="control-panel">
+                <button id="edit-mode" class="btn btn-secondary">✎ Modifier</button>
+                <button id="add-button" class="btn btn-primary">+ Ajouter</button>
+            </div>
+        </nav>
+
         <!-- Main Content -->
         <main class="deck-main">
             <!-- Deck Grid -->
             <div id="deck-grid-container" class="deck-grid-container">
                 <div id="deck-grid" class="deck-grid"></div>
+                <div id="empty-grid" class="empty-grid hidden">
+                    <p>Cette page est vide</p>
+                    <button class="btn btn-primary add-button-prompt">Ajouter un bouton</button>
+                </div>
+            </div>
+
+            <!-- Side Panel -->
+            <div class="side-panel" id="side-panel">
+                <div class="panel-header">
+                    <h3>Configuration</h3>
+                    <button class="close-panel" id="close-panel">×</button>
+                </div>
+                <div class="panel-content">
+                    <div id="edit-panel" class="hidden">
+                        <h4>Modifier le bouton</h4>
+                        <form id="button-edit-form">
+                            <div class="form-group">
+                                <label for="button-label">Libellé</label>
+                                <input type="text" id="button-label" placeholder="Mon Bouton">
+                            </div>
+                            <div class="form-group">
+                                <label for="button-icon">Icône</label>
+                                <input type="text" id="button-icon" placeholder="🎵">
+                            </div>
+                            <div class="form-group">
+                                <label for="button-color">Couleur</label>
+                                <select id="button-color">
+                                    <option value="#3b82f6">Bleu</option>
+                                    <option value="#ef4444">Rouge</option>
+                                    <option value="#10b981">Vert</option>
+                                    <option value="#f59e0b">Orange</option>
+                                    <option value="#6366f1">Indigo</option>
+                                    <option value="#ec4899">Rose</option>
+                                    <option value="#8b5cf6">Violet</option>
+                                    <option value="#06b6d4">Cyan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="button-action">Action</label>
+                                <select id="button-action">
+                                    <option value="custom">Action personnalisée</option>
+                                    <option value="volume-up">Volume +</option>
+                                    <option value="volume-down">Volume -</option>
+                                    <option value="mute">Muet</option>
+                                    <option value="screenshot">Capture d'écran</option>
+                                    <option value="media-play-pause">Play/Pause</option>
+                                    <option value="open-browser">Ouvrir navigateur</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                <button type="button" id="delete-button" class="btn btn-danger">Supprimer</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="add-panel" class="hidden">
+                        <h4>Ajouter un bouton</h4>
+                        <form id="button-add-form">
+                            <div class="form-group">
+                                <label for="add-button-label">Libellé</label>
+                                <input type="text" id="add-button-label" placeholder="Mon Bouton">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-button-icon">Icône</label>
+                                <input type="text" id="add-button-icon" placeholder="🎵">
+                            </div>
+                            <div class="form-group">
+                                <label for="add-button-color">Couleur</label>
+                                <select id="add-button-color">
+                                    <option value="#3b82f6">Bleu</option>
+                                    <option value="#ef4444">Rouge</option>
+                                    <option value="#10b981">Vert</option>
+                                    <option value="#f59e0b">Orange</option>
+                                    <option value="#6366f1">Indigo</option>
+                                    <option value="#ec4899">Rose</option>
+                                    <option value="#8b5cf6">Violet</option>
+                                    <option value="#06b6d4">Cyan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="add-button-action">Action</label>
+                                <select id="add-button-action">
+                                    <option value="custom">Action personnalisée</option>
+                                    <option value="volume-up">Volume +</option>
+                                    <option value="volume-down">Volume -</option>
+                                    <option value="mute">Muet</option>
+                                    <option value="screenshot">Capture d'écran</option>
+                                    <option value="media-play-pause">Play/Pause</option>
+                                    <option value="open-browser">Ouvrir navigateur</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </main>
 
