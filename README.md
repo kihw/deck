@@ -79,6 +79,30 @@ interface Plugin {
 }
 ```
 
+### Gestion des Plugins
+
+Deck offre plusieurs outils pour faciliter la gestion des plugins:
+
+```bash
+# Interface interactive de gestion des plugins
+node cli.js plugins
+
+# ou avec npm
+npm run plugin:manage
+
+# Créer un nouveau plugin
+node scripts/generate-plugin-template.js mon-plugin "Mon Plugin"
+
+# ou avec npm
+npm run plugin:create mon-plugin "Mon Plugin"
+
+# Lister les plugins installés
+node cli.js plugin list
+
+# ou avec npm
+npm run plugin:list
+```
+
 ## 🛠️ Configuration
 
 ### Variables d'Environnement
@@ -118,12 +142,19 @@ Les plugins sont configurables via `src/config/plugins.default.json` :
 }
 ```
 
+Vous pouvez aussi configurer les plugins avec l'outil de gestion interactif :
+
+```bash
+node cli.js plugins
+```
+
 ## 📚 Documentation
 
 - [Guide d'Utilisation des Plugins](docs/PLUGIN_USAGE.md)
 - [Architecture du Système de Plugins](docs/PLUGIN_ARCHITECTURE.md)
 - [Développement de Plugins](docs/PLUGIN_DEVELOPMENT.md)
 - [Déploiement Docker](docs/DOCKER_DEPLOYMENT.md)
+- [Documentation du Icon Manager](docs/plugins/ICON_MANAGER.md)
 
 ## 🧩 Utilisation du CLI
 
@@ -144,6 +175,9 @@ node cli.js plugin create mon-plugin "Mon Plugin"
 
 # Lister les plugins installés
 node cli.js plugin list
+
+# Gérer les plugins (activer/désactiver/configurer)
+node cli.js plugins
 
 # Afficher l'aide
 node cli.js help
