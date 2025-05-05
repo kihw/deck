@@ -1,89 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Deck Control Panel</title>
-    <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-        }
-        
-        .deck-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            padding: 20px;
-        }
-        
-        .deck-button {
-            width: 120px;
-            height: 120px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .deck-button:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    <title>Deck - Plateforme Stream Deck Web</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <div id="deck-container" class="deck-grid"></div>
-    
-    <script>
-        class DeckUI {
-            constructor() {
-                this.container = document.getElementById('deck-container');
-                this.renderButtons();
-            }
+    <div id="deck-container">
+        <header>
+            <h1>Deck</h1>
+            <nav id="deck-controls">
+                <button id="add-button">Ajouter un Bouton</button>
+                <button id="settings-button">Paramètres</button>
+            </nav>
+        </header>
+        
+        <main id="deck-grid">
+            <!-- Les boutons seront générés dynamiquement -->
+        </main>
+    </div>
 
-            renderButtons() {
-                const buttons = [
-                    { 
-                        id: 'spotify-play', 
-                        label: 'Play/Pause', 
-                        plugin: 'spotify',
-                        action: 'play-pause'
-                    },
-                    { 
-                        id: 'spotify-next', 
-                        label: 'Next Track', 
-                        plugin: 'spotify', 
-                        action: 'next-track'
-                    }
-                ];
+    <div id="modal-container" class="hidden">
+        <div class="modal">
+            <h2>Configuration du Bouton</h2>
+            <form id="button-config-form">
+                <input type="text" id="button-label" placeholder="Libellé">
+                <select id="button-action">
+                    <option>OBS</option>
+                    <option>Discord</option>
+                    <option>MIDI</option>
+                </select>
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </div>
 
-                buttons.forEach(button => {
-                    const buttonEl = this.createButton(button);
-                    this.container.appendChild(buttonEl);
-                });
-            }
-
-            createButton(config) {
-                const button = document.createElement('button');
-                button.classList.add('deck-button');
-                button.textContent = config.label;
-                
-                button.onclick = () => {
-                    console.log(`Executing ${config.plugin}:${config.action}`);
-                };
-
-                return button;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new DeckUI();
-        });
-    </script>
+    <script type="module" src="/scripts/main.js"></script>
 </body>
 </html>
