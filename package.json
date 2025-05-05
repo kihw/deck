@@ -11,7 +11,7 @@
     "build-client": "webpack --config webpack.config.js",
     "build-server": "echo 'Building server...'",
     "lint": "eslint .",
-    "install-cli": "npm link",
+    "postinstall": "node scripts/postinstall.js",
     "deck": "node src/index.js"
   },
   "keywords": [
