@@ -1,0 +1,38 @@
+{
+  "system-monitor": {
+    "enabled": true,
+    "settings": {
+      "autoStart": false,
+      "interval": 5000,
+      "logToFile": false,
+      "alertThresholds": {
+        "cpuUsage": 80,
+        "memoryUsage": 90
+      }
+    }
+  },
+  "discord-integration": {
+    "enabled": false,
+    "settings": {
+      "autoConnect": false,
+      "defaultChannel": null,
+      "notificationPreferences": {
+        "systemAlerts": false,
+        "performanceWarnings": false
+      }
+    }
+  },
+  "spotify-control": {
+    "enabled": false,
+    "settings": {
+      "autoAuthenticate": false,
+      "defaultPlaylist": null,
+      "playbackPreferences": {
+        "shuffle": false,
+        "repeat": "off",
+        "defaultVolume": 50
+      },
+      "authorizedDevices": []
+    }
+  }
+}
