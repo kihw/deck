@@ -83,6 +83,7 @@ class DeckClient {
     const button = document.createElement('button');
     button.className = 'deck-button';
     button.dataset.buttonId = config.id;
+    button.dataset.type = config.type; // Add type data attribute for styling
     
     const label = document.createElement('span');
     label.className = 'button-label';
