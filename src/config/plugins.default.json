@@ -1,0 +1,25 @@
+{
+  "system-monitor": {
+    "enabled": true,
+    "settings": {
+      "autoStart": false,
+      "interval": 5000,
+      "logToFile": false,
+      "alertThresholds": {
+        "cpuUsage": 80,
+        "memoryUsage": 90
+      }
+    }
+  },
+  "discord-integration": {
+    "enabled": false,
+    "settings": {
+      "autoConnect": false,
+      "defaultChannel": null,
+      "notificationPreferences": {
+        "systemAlerts": false,
+        "performanceWarnings": false
+      }
+    }
+  }
+}
