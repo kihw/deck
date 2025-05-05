@@ -9,10 +9,15 @@ class ObsPlugin extends BasePlugin {
 
     async initialize(server) {
         try {
-            await this.obs.connect({
-                address: 'localhost:4444',
-                password: process.env.OBS_PASSWORD || ''
-            });
+            // Correction du format de connexion - utilisant le format d'URL attendu
+            // Format: "ws://address:port" ou "ws://address:port/password"
+            const address = process.env.OBS_ADDRESS || 'localhost:4444';
+            const password = process.env.OBS_PASSWORD || '';
+            const url = `ws://${address}`;
+            
+            // Connexion avec l'URL appropriée et le mot de passe en option
+            await this.obs.connect(url, password);
+            
             this.connected = true;
             console.log('OBS WebSocket connecté');
         } catch (error) {
@@ -24,7 +29,10 @@ class ObsPlugin extends BasePlugin {
     registerActions(actionRegistry) {
         super.registerActions(actionRegistry);
         
-        if (!this.connected) return;
+        if (!this.connected) {
+            console.log('ObsPlugin non connecté. Actions non enregistrées.');
+            return;
+        }
 
         actionRegistry.register('obs.toggleStream', async () => {
             try {
