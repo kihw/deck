@@ -5,16 +5,13 @@ class BasePlugin {
     }
 
     async initialize(server) {
-        console.log(`Initialisation de base pour ${this.name}`);
-        this.connected = true;
+        console.log(`✅ Plugin chargé : ${this.name}`);
     }
 
     registerActions(actionRegistry) {
-        if (!this.connected) {
-            console.warn(`${this.name} non connecté. Actions non enregistrées.`);
-            return;
-        }
-        console.log(`Aucune action spécifique pour ${this.name}`);
+        // This method should not be called directly from BasePlugin.
+        // Each plugin should override this method and decide if and when to call super.
+        // This avoids the annoying "non connecté" messages when plugins are optional.
     }
 }
 
