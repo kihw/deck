@@ -1,4 +1,4 @@
-const OBSWebSocket = require('obs-websocket-js');
+const OBSWebSocket = require('obs-websocket-js').default; // Ajout de .default
 
 class ObsPlugin {
     constructor() {
@@ -13,16 +13,16 @@ class ObsPlugin {
                 password: process.env.OBS_PASSWORD || ''
             });
             this.connected = true;
-            console.log('OBS WebSocket connected successfully');
+            console.log('OBS WebSocket connecté');
         } catch (error) {
-            console.error('Failed to connect to OBS WebSocket:', error);
+            console.error('Échec de connexion à OBS:', error);
             this.connected = false;
         }
     }
 
     registerActions(actionRegistry) {
         if (!this.connected) {
-            console.warn('OBS Plugin not connected. Skipping action registration.');
+            console.warn('OBS Plugin non connecté. Impossible d\'enregistrer les actions.');
             return;
         }
 
@@ -31,16 +31,7 @@ class ObsPlugin {
                 const streamStatus = await this.obs.call('GetStreamStatus');
                 await this.obs.call(streamStatus.outputActive ? 'StopStream' : 'StartStream');
             } catch (error) {
-                console.error('OBS Stream Toggle Error:', error);
-            }
-        });
-
-        actionRegistry.register('obs.toggleRecord', async () => {
-            try {
-                const recordStatus = await this.obs.call('GetRecordStatus');
-                await this.obs.call(recordStatus.outputActive ? 'StopRecord' : 'StartRecord');
-            } catch (error) {
-                console.error('OBS Record Toggle Error:', error);
+                console.error('Erreur de toggle Stream:', error);
             }
         });
     }
