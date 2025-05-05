@@ -1,28 +1,30 @@
 class WebSocket {
-  constructor(io, actionManager, authService) {
+  constructor(io, actionManager, authService, securityManager) {
     this.io = io;
     this.actionManager = actionManager;
     this.authService = authService;
+    this.securityManager = securityManager;
     this.setupEvents();
   }
 
   setupEvents() {
     this.io.on('connection', (socket) => {
-      console.log(`New connection: ${socket.id}`);
+      const clientIP = socket.handshake.address || socket.conn.remoteAddress;
+      console.log(`New connection: ${socket.id} from ${clientIP}`);
       
       // Authentification
       socket.on('authenticate', async (pin) => {
-        const isValid = await this.authService.verifyPin(pin);
+        const authResult = await this.authService.verifyPin(pin, clientIP);
         
-        if (isValid) {
+        if (authResult.success) {
           const token = this.authService.generateToken();
           socket.token = token;
           socket.authenticated = true;
-          this.authService.addConnection(token, socket.id);
+          this.authService.addConnection(token, socket.id, clientIP);
           socket.emit('authenticated', { token, success: true });
           this.broadcastButtonConfig(socket);
         } else {
-          socket.emit('authentication_failed', { success: false });
+          socket.emit('authentication_failed', { success: false, error: authResult.error });
         }
       });
       
@@ -67,6 +69,12 @@ class WebSocket {
 
       socket.on('update_button', (data) => {
         const { buttonId, config } = data;
+        // Validate button config for security
+        if (!this.securityManager.validateButtonConfig(config)) {
+          socket.emit('button_update_error', { error: 'Invalid button configuration' });
+          return;
+        }
+        
         this.actionManager.updateButton(buttonId, config);
         this.io.emit('button_updated', { buttonId, config });
       });
