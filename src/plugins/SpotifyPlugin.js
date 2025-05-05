@@ -1,8 +1,6 @@
-class SpotifyPlugin {
-    constructor() {
-        this.connected = false;
-    }
+const BasePlugin = require('./BasePlugin');
 
+class SpotifyPlugin extends BasePlugin {
     async initialize(server) {
         try {
             // Logique d'initialisation Spotify
@@ -15,10 +13,9 @@ class SpotifyPlugin {
     }
 
     registerActions(actionRegistry) {
-        if (!this.connected) {
-            console.warn('Plugin Spotify non connecté. Impossible d\'enregistrer les actions.');
-            return;
-        }
+        super.registerActions(actionRegistry);
+        
+        if (!this.connected) return;
 
         actionRegistry.register('spotify.playPause', () => {
             console.log('Action Play/Pause Spotify');
