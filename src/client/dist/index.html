@@ -91,25 +91,6 @@
     </div>
 
     <!-- Scripts -->
-    <script>
-        console.log('Script started');
-        
-        // Simple timeout to hide loading splash
-        setTimeout(() => {
-            console.log('Hiding loading splash');
-            document.getElementById('loading-splash').classList.add('hidden');
-            document.getElementById('auth-container').classList.remove('hidden');
-        }, 1000);
-        
-        // Test button auth
-        const authBtn = document.getElementById('auth-btn');
-        authBtn.onclick = () => {
-            console.log('Auth clicked');
-            document.getElementById('auth-container').classList.add('hidden');
-            document.getElementById('deck-container').classList.remove('hidden');
-        };
-        
-        console.log('Script loaded');
-    </script>
+    <script src="scripts/simple.js"></script>
 </body>
 </html>
