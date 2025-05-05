@@ -1,38 +1,25 @@
 # Changelog
 
-All notable changes to the Deck project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.0.0] - 2025-05-05
+## [Unreleased]
 
 ### Added
-- Initial release of Deck - Virtual Stream Deck
-- Remote Stream Deck interface accessible via web browser
-- Multi-device support (PC, smartphone, tablet)
-- PIN-based authentication system
-- Real-time WebSocket communication
-- Default actions: Volume control, Screenshot, Open Browser
-- QR code for easy connection sharing
-- Responsive web interface for all screen sizes
-- CLI command support (`deck start`)
-- Easy installation with install.sh script
-- Comprehensive documentation and user guide
-- Unit tests for core functionality
-- Environment configuration via .env file
+- Dynamic plugin system with BasePlugin interface
+- PluginLoader for managing plugin lifecycle
+- ObsPlugin as an example of plugin integration
+- Support for OBS WebSocket actions via plugin system
 
-### Security
-- Random 4-digit PIN generation on startup
-- Token-based session management
-- Connection timeouts and limits
-- Local network only access
+### Changed
+- Refactored `src/index.js` to support dynamic plugin loading
+- Updated `package.json` to include `obs-websocket-js` dependency
 
-### Technical Implementation
-- Node.js + Express + Socket.IO backend
-- HTML5 + CSS3 + JavaScript frontend  
-- Modular architecture with services pattern
-- Extensible action system
-- Error handling and logging
+### Features
+- Plugins can now:
+  - Register custom actions
+  - Manage connection states
+  - Provide lifecycle methods (initialize, unload)
+  - Dynamically extend application functionality
 
-[1.0.0]: https://github.com/kihw/deck/releases/tag/v1.0.0
+## [1.0.0] - Initial Release
+- Initial project setup
+- Basic server and client infrastructure
+- Core streaming deck functionality
