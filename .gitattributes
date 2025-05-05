@@ -1,0 +1,61 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# JavaScript/TypeScript files will always have LF endings
+*.js text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+
+# CSS/SCSS files will always have LF endings
+*.css text eol=lf
+*.scss text eol=lf
+
+# HTML files will always have LF endings
+*.html text eol=lf
+
+# Shell scripts will always have LF endings
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Batch files will always have CRLF endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Documentation files
+*.md text eol=lf
+*.txt text eol=lf
+
+# Configuration files
+.env* text eol=lf
+.gitignore text eol=lf
+.eslintrc* text eol=lf
+.prettierrc* text eol=lf
+.babelrc* text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Denote all files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.svg text
+
+# Sources files should be normalized (LF and no BOM)
+src/* text eol=lf
