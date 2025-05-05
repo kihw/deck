@@ -51,6 +51,10 @@ async function main() {
     case 'plugin':
       await handlePluginCommand();
       break;
+    case 'manage-plugins':
+    case 'plugins':
+      await managePlugins();
+      break;
     case 'help':
       printHelp();
       break;
@@ -142,6 +146,7 @@ async function handlePluginCommand() {
     console.log('\nPlugin command requires a subcommand:');
     console.log('  create   Create a new plugin');
     console.log('  list     List all installed plugins');
+    console.log('  manage   Manage plugins (enable/disable/configure)');
     console.log('\nExample: deck plugin create my-plugin "My Plugin Name"');
     return;
   }
@@ -200,13 +205,48 @@ async function handlePluginCommand() {
       }
       break;
       
+    case 'manage':
+      // Launch the plugin manager
+      await managePlugins();
+      break;
+      
     default:
       console.log(`\nUnknown plugin subcommand: ${subCommand}`);
       console.log('\nAvailable plugin subcommands:');
       console.log('  create   Create a new plugin');
       console.log('  list     List all installed plugins');
+      console.log('  manage   Manage plugins (enable/disable/configure)');
       break;
   }
+}
+
+/**
+ * Launch the plugin manager
+ */
+async function managePlugins() {
+  console.log('🔌 Launching Plugin Manager...');
+  
+  // Check if plugin manager exists
+  const pluginManagerPath = path.join(__dirname, 'scripts', 'plugin-manager.js');
+  if (!fs.existsSync(pluginManagerPath)) {
+    console.error(`❌ Plugin Manager not found at ${pluginManagerPath}`);
+    return;
+  }
+  
+  // Run the plugin manager
+  const managerProcess = spawn('node', [pluginManagerPath, 'interactive'], { 
+    stdio: 'inherit',
+    env: { ...process.env }
+  });
+  
+  await new Promise((resolve) => {
+    managerProcess.on('close', (code) => {
+      if (code !== 0) {
+        console.error(`Plugin Manager exited with code ${code}`);
+      }
+      resolve();
+    });
+  });
 }
 
 /**
@@ -221,6 +261,7 @@ function printHelp() {
   console.log('  start             Start the Deck application');
   console.log('  setup             Set up the Deck application');
   console.log('  plugin <command>  Manage plugins');
+  console.log('  plugins           Launch interactive Plugin Manager');
   console.log('  help              Show this help message');
   console.log('  version           Show version information');
   console.log('\nOptions:');
@@ -230,6 +271,7 @@ function printHelp() {
   console.log('  deck start --port 8080');
   console.log('  deck setup --install');
   console.log('  deck plugin create my-plugin "My Plugin"');
+  console.log('  deck plugins');
 }
 
 /**
