@@ -1,37 +1,58 @@
 # Deck - Stream Deck Virtuel
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node Version](https://img.shields.io/badge/node-14%2B-brightgreen.svg)
 
-**Deck** est une application logicielle qui transforme n'importe quel appareil en Stream Deck virtuel, accessible à distance via une interface web.
+**Deck** est une application qui transforme n'importe quel appareil en Stream Deck virtuel, accessible à distance via une interface web.
 
 ## 🚀 Quick Start
 
 ```bash
-# Installation rapide (à implémenter)
-npm install deck
+# Installation
+git clone https://github.com/kihw/deck.git
+cd deck
+chmod +x install.sh
+./install.sh
+
+# Démarrage
 deck start
 ```
 
-L'application sera accessible à l'adresse affichée dans le terminal.
+L'application sera accessible à l'adresse affichée dans le terminal (ex: http://192.168.1.100:3000)
+
+## 📱 Utilisation
+
+1. **Sur l'ordinateur principal :** Lancez `deck start`
+2. **Sur les autres appareils :** Connectez-vous à l'URL affichée
+3. **Authentification :** Entrez le code PIN affiché dans le terminal
+4. **Partagez facilement :** Utilisez le QR code pour une connexion rapide
 
 ## 📋 Prérequis
 
-- Node.js 14+ ou Python 3.8+
-- Navigateur web moderne
+- Node.js 14+ (https://nodejs.org/)
+- Navigation web moderne
 - Connexion réseau locale
 
-## 🌟 Fonctionnalités Principales
+## 🌟 Fonctionnalités
 
+### Principales
 - ✨ **Interface Stream Deck virtuelle** accessible via web
 - 📱 **Support multi-appareils** (PC, smartphone, tablette)
 - 🔒 **Accès sécurisé** avec authentification PIN
-- 🎨 **Personnalisation** des boutons et thèmes
-- 🔄 **Mise à jour en temps réel** via WebSocket
+- 🎨 **Interface responsive** adaptée à tous les écrans
+- 🔄 **Communication temps réel** via WebSocket
+- 📷 **QR Code** pour connexion rapide
+
+### Actions Disponibles
+- 🔊 Contrôle du volume (augmenter/diminuer)
+- 📸 Capture d'écran
+- 🌐 Ouverture du navigateur web
+- ➕ Facile à étendre avec de nouvelles actions
 
 ## 🛠️ Technologies
 
 - **Backend**: Node.js + Express + Socket.IO
-- **Frontend**: HTML5 + CSS3 + JavaScript
+- **Frontend**: HTML5 + CSS3 + JavaScript  
 - **Communication**: WebSocket pour temps réel
 
 ## 📁 Structure du Projet
@@ -39,17 +60,61 @@ L'application sera accessible à l'adresse affichée dans le terminal.
 ```
 deck/
 ├── src/
-│   ├── server/
-│   ├── client/
-│   └── shared/
-├── docs/
-├── tests/
-└── examples/
+│   ├── index.js           # Point d'entrée
+│   ├── server/            # Code serveur
+│   │   ├── app.js         # Application principale
+│   │   ├── config.js      # Configuration
+│   │   ├── routes/        # API Routes
+│   │   ├── services/      # Services (auth, actions)
+│   │   └── websocket/     # Gestion WebSocket
+│   └── client/
+│       └── dist/          # Interface web
+│           ├── index.html
+│           ├── scripts/   # JavaScript client
+│           └── styles/    # CSS
+├── docs/                  # Documentation
+├── install.sh             # Script d'installation
+└── package.json
+```
+
+## ⚙️ Configuration
+
+Créez un fichier `.env` pour personnaliser :
+
+```env
+PORT=3000
+HOST=0.0.0.0
+PIN_LENGTH=4
+MAX_CONNECTIONS=10
+```
+
+## 🔧 Développement
+
+```bash
+# Mode développement (avec auto-reload)
+npm run dev
+
+# Tests
+npm test
+
+# Build
+npm run build
 ```
 
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour les directives.
+
+### Comment Contribuer
+1. Fork le projet
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## 🐛 Signaler un Bug
+
+Utilisez les [Issues](https://github.com/kihw/deck/issues) pour signaler des bugs ou proposer des améliorations.
 
 ## 📄 License
 
@@ -57,7 +122,13 @@ MIT License - voir [LICENSE](LICENSE) pour plus de détails.
 
 ## 📞 Support
 
-Pour toute question, créez une [issue](https://github.com/kihw/deck/issues) sur GitHub.
+- 📮 Issues GitHub : [Issues](https://github.com/kihw/deck/issues)
+- 📧 Email : contact@deck-project.com
+- 💬 Discord : [Rejoindre le serveur](https://discord.gg/deck)
+
+## 🙏 Remerciements
+
+Merci à tous les contributeurs qui ont participé à ce projet !
 
 ---
 
