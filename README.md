@@ -1,6 +1,6 @@
 # Deck - Stream Deck Virtuel Accessible à Distance 🚀
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/kihw/deck)
+[![Version](https://img.shields.io/badge/version-1.1.2-blue.svg)](https://github.com/kihw/deck)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ## Présentation
@@ -14,7 +14,10 @@ Deck est une application qui transforme n'importe quel appareil en Stream Deck v
 # Installation
 ./install.sh
 
-# Démarrage
+# Démarrage avec CLI
+node cli.js start
+
+# ou avec script
 ./start.sh
 ```
 
@@ -23,7 +26,10 @@ Deck est une application qui transforme n'importe quel appareil en Stream Deck v
 # Installation
 install.bat
 
-# Démarrage
+# Démarrage avec CLI
+node cli.js start
+
+# ou avec script
 start.bat
 ```
 
@@ -36,6 +42,7 @@ Une fois démarré, ouvrez l'URL affichée dans le terminal depuis n'importe que
 - Prise en charge d'OBS Studio, Spotify, Discord et plus
 - Authentification par code PIN
 - Personnalisation complète des boutons et actions
+- Gestion d'icônes centralisée
 
 ## 🔌 Système de Plugins
 
@@ -46,6 +53,8 @@ Une fois démarré, ouvrez l'URL affichée dans le terminal depuis n'importe que
 - **Discord Integration** : Envoi de messages et gestion de bot Discord
 - **Custom Notifications** : Système de notification multi-canaux
 - **System Monitor** : Surveillance des ressources système
+- **Icon Manager** : Gestion centralisée des icônes
+- **System Shortcuts** : Raccourcis système multiplateforme
 
 ### Structure d'un Plugin
 
@@ -116,6 +125,30 @@ Les plugins sont configurables via `src/config/plugins.default.json` :
 - [Développement de Plugins](docs/PLUGIN_DEVELOPMENT.md)
 - [Déploiement Docker](docs/DOCKER_DEPLOYMENT.md)
 
+## 🧩 Utilisation du CLI
+
+Deck dispose d'un outil en ligne de commande pour simplifier la gestion :
+
+```bash
+# Démarrer l'application
+node cli.js start
+
+# Démarrer sur un port spécifique
+node cli.js start --port 8080
+
+# Configuration initiale
+node cli.js setup
+
+# Créer un nouveau plugin
+node cli.js plugin create mon-plugin "Mon Plugin"
+
+# Lister les plugins installés
+node cli.js plugin list
+
+# Afficher l'aide
+node cli.js help
+```
+
 ## 🔄 Cycle de Vie des Plugins
 
 1. Chargement et enregistrement
@@ -158,6 +191,15 @@ git push origin main
 
 # Option 2 : Utiliser le script automatisé
 ./scripts/push-to-main.sh "Description des changements"
+```
+
+### Création de Plugins
+
+Utilisez le générateur de templates pour créer rapidement un plugin :
+
+```bash
+# Créer un nouveau plugin
+node scripts/generate-plugin-template.js mon-plugin "Mon Plugin"
 ```
 
 ### Bonnes Pratiques
