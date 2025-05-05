@@ -139,10 +139,33 @@ Les plugins sont configurables via `src/config/plugins.default.json` :
 
 ## 🤝 Contribuer
 
+### Workflow de Développement
+
+Nous utilisons un workflow direct sur la branche principale :
+
+```bash
+# Cloner le repo
+git clone https://github.com/kihw/deck.git
+cd deck
+
+# Faire vos modifications...
+
+# Pousser directement sur main
+# Option 1 : Manuellement
+git add .
+git commit -m "Description des changements"
+git push origin main
+
+# Option 2 : Utiliser le script automatisé
+./scripts/push-to-main.sh "Description des changements"
+```
+
+### Bonnes Pratiques
+
 1. Suivez l'interface de plugin standard
 2. Écrivez des tests complets
 3. Documentez votre code et vos fonctionnalités
-4. Soumettez une pull request
+4. Assurez-vous que l'application fonctionne après vos modifications
 
 ## 📄 Licence
 
