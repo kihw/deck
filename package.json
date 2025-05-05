@@ -32,7 +32,8 @@
     "socket.io": "^4.6.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express-rate-limit": "^6.7.0"
+    "express-rate-limit": "^6.7.0",
+    "obs-websocket-js": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
