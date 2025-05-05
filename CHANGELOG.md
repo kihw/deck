@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.1] - 2025-05-05
+
+### Changed
+- Refactored application architecture with new main.js entry point
+- Improved shutdown handling with proper plugin unloading
+- Enhanced startup process with better error handling
+
+### Added
+- Comprehensive plugin usage documentation
+- Additional error handling for plugin initialization
+- Better support for environment variables in plugins
+
+### Fixed
+- Fixed outdated references to src/index.js in installation scripts
+- Corrected plugin registration process
+
 ## [1.1.0] - 2024-05-05
 
 ### Added
