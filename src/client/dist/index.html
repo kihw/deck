@@ -5,32 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deck - Stream Deck Virtuel</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="description" content="Contrôlez votre ordinateur à distance avec Deck">
+    
+    <!-- Prefetch DNS for external resources -->
+    <link rel="dns-prefetch" href="https://chart.googleapis.com">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
 </head>
 <body>
-    <div id="auth-container" class="container">
+    <!-- Loading Splash -->
+    <div id="loading-splash" class="loading-splash">
+        <div class="loading-logo">⚡</div>
+        <div class="loading-text">Deck</div>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="container hidden">
+        <div class="auth-logo">⚡</div>
         <h1>Deck</h1>
-        <p>Entrez le code PIN pour accéder à votre Stream Deck virtuel</p>
-        <div class="pin-input">
-            <input type="text" id="pin" maxlength="4" placeholder="____">
-            <button id="auth-btn">Connecter</button>
+        <p class="auth-description">Entrez le code PIN pour accéder à votre Stream Deck virtuel</p>
+        
+        <div class="pin-input-wrapper">
+            <div class="pin-input">
+                <input type="text" id="pin-1" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" id="pin-2" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" id="pin-3" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                <input type="text" id="pin-4" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            </div>
+            <button id="auth-btn" class="btn btn-primary" disabled>
+                <span class="btn-text">Connecter</span>
+                <span class="btn-loading">
+                    <div class="spinner"></div>
+                </span>
+            </button>
         </div>
-        <p id="auth-error" class="error hidden">PIN incorrect</p>
+        
+        <div id="auth-error" class="error-message hidden"></div>
+        
+        <!-- Auth Footer -->
+        <div class="auth-footer">
+            <p>Assurez-vous d'être sur le même réseau</p>
+        </div>
     </div>
 
+    <!-- Main Deck Container -->
     <div id="deck-container" class="container hidden">
-        <div id="header">
-            <h2>Deck Virtuel</h2>
-            <button id="disconnect-btn">Déconnecter</button>
+        <!-- Header -->
+        <header class="deck-header">
+            <div class="header-left">
+                <div class="logo">⚡</div>
+                <div class="header-info">
+                    <h2>Deck Virtuel</h2>
+                    <div class="connection-status" id="connection-status">
+                        <span class="status-indicator"></span>
+                        <span class="status-text">Connecté</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="btn btn-icon" title="Basculer le thème">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button id="disconnect-btn" class="btn btn-secondary">
+                    <span>Déconnecter</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="deck-main">
+            <!-- Deck Grid -->
+            <div id="deck-grid-container" class="deck-grid-container">
+                <div id="deck-grid" class="deck-grid"></div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="info-panel" id="info-panel">
+                <div class="panel-header">
+                    <h3>Information</h3>
+                    <button class="close-panel" id="close-info">×</button>
+                </div>
+                <div class="panel-content">
+                    <p>Sélectionnez un bouton pour voir ses détails</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Share Panel -->
+        <div class="share-panel" id="share-panel">
+            <div class="share-header">
+                <h3>Partager votre Deck</h3>
+                <p>Scannez ce QR code ou utilisez l'URL pour accéder depuis un autre appareil</p>
+            </div>
+            
+            <div class="share-content">
+                <div class="qr-container">
+                    <div id="qr-code" class="qr-code"></div>
+                </div>
+                
+                <div class="url-container">
+                    <input type="text" id="share-url" class="share-url-input" readonly>
+                    <button id="copy-url" class="btn btn-icon" title="Copier l'URL">
+                        <span class="copy-icon">📋</span>
+                    </button>
+                </div>
+            </div>
+            
+            <button id="close-share" class="btn btn-secondary full-width">Fermer</button>
         </div>
-        <div id="buttons-grid" class="deck-grid"></div>
-        <div id="qr-container" class="qr-container">
-            <h3>Partagez votre Deck</h3>
-            <div id="qr-code"></div>
-            <p id="share-url" class="share-url"></p>
+
+        <!-- Quick Share Button -->
+        <button id="quick-share" class="quick-share-btn" title="Partager">
+            <span>📤</span>
+        </button>
+    </div>
+
+    <!-- PWA Install Prompt -->
+    <div id="install-prompt" class="install-prompt hidden">
+        <div class="install-content">
+            <h3>Installer Deck</h3>
+            <p>Ajoutez Deck à votre écran d'accueil pour un accès rapide</p>
+            <div class="install-actions">
+                <button id="install-pwa" class="btn btn-primary">Installer</button>
+                <button id="dismiss-install" class="btn btn-ghost">Plus tard</button>
+            </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="scripts/main.js"></script>
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(err => console.log('SW registration failed'));
+            });
+        }
+    </script>
 </body>
 </html>
