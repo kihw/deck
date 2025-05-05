@@ -7,6 +7,20 @@
 
 ## 🚀 Quick Start
 
+### Sur Windows
+```bash
+# Téléchargez le projet
+git clone https://github.com/kihw/deck.git
+cd deck
+
+# Double-cliquez sur install.bat ou exécutez dans PowerShell
+.\install.bat
+
+# Démarrage
+deck start
+```
+
+### Sur Linux/macOS
 ```bash
 # Installation
 git clone https://github.com/kihw/deck.git
@@ -73,7 +87,8 @@ deck/
 │           ├── scripts/   # JavaScript client
 │           └── styles/    # CSS
 ├── docs/                  # Documentation
-├── install.sh             # Script d'installation
+├── install.sh             # Script d'installation (Linux/macOS)
+├── install.bat            # Script d'installation (Windows)
 └── package.json
 ```
 
@@ -99,6 +114,18 @@ npm test
 
 # Build
 npm run build
+```
+
+## 🐳 Docker
+
+Pour utiliser Deck avec Docker :
+
+```bash
+# Construire et lancer
+docker-compose up -d
+
+# Accéder à l'application
+http://localhost:3000
 ```
 
 ## 🤝 Contribution
