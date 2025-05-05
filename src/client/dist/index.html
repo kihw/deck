@@ -4,143 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deck - Stream Deck Virtuel</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2c3e50">
-    <meta name="description" content="Contrôlez votre ordinateur à distance avec Deck">
-    
-    <!-- Prefetch DNS for external resources -->
-    <link rel="dns-prefetch" href="https://chart.googleapis.com">
-    
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #loading-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .hidden { display: none !important; }
+        #auth-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .pin-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pin-input input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 30px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Splash -->
-    <div id="loading-splash" class="loading-splash">
-        <div class="loading-logo">⚡</div>
-        <div class="loading-text">Deck</div>
-        <div class="loading-spinner"></div>
+    <div id="loading-splash">
+        <h1>Chargement...</h1>
+        <p>⚡ Deck</p>
     </div>
 
-    <!-- Auth Container -->
     <div id="auth-container" class="container hidden">
-        <div class="auth-logo">⚡</div>
         <h1>Deck</h1>
-        <p class="auth-description">Entrez le code PIN pour accéder à votre Stream Deck virtuel</p>
+        <p>Entrez le code PIN pour accéder à votre Stream Deck virtuel</p>
         
-        <div class="pin-input-wrapper">
-            <div class="pin-input">
-                <input type="text" id="pin-1" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                <input type="text" id="pin-2" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                <input type="text" id="pin-3" maxlength="1" pattern="[0-9]" inputmode="numeric">
-                <input type="text" id="pin-4" maxlength="1" pattern="[0-9]" inputmode="numeric">
-            </div>
-            <button id="auth-btn" class="btn btn-primary" disabled>
-                <span class="btn-text">Connecter</span>
-                <span class="btn-loading">
-                    <div class="spinner"></div>
-                </span>
-            </button>
+        <div class="pin-input">
+            <input type="text" id="pin-1" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" id="pin-2" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" id="pin-3" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" id="pin-4" maxlength="1" pattern="[0-9]" inputmode="numeric">
         </div>
         
-        <div id="auth-error" class="error-message hidden"></div>
-        
-        <!-- Auth Footer -->
-        <div class="auth-footer">
-            <p>Assurez-vous d'être sur le même réseau</p>
-        </div>
+        <button id="auth-btn" disabled>Connecter</button>
+        <div id="auth-error" style="color: red; margin-top: 10px;" class="hidden"></div>
     </div>
 
-    <!-- Main Deck Container -->
     <div id="deck-container" class="container hidden">
-        <!-- Header -->
-        <header class="deck-header">
-            <div class="header-left">
-                <div class="logo">⚡</div>
-                <div class="header-info">
-                    <h2>Deck Virtuel</h2>
-                    <div class="connection-status" id="connection-status">
-                        <span class="status-indicator"></span>
-                        <span class="status-text">Connecté</span>
-                    </div>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button id="theme-toggle" class="btn btn-icon" title="Basculer le thème">
-                    <span class="theme-icon">🌙</span>
-                </button>
-                <button id="disconnect-btn" class="btn btn-secondary">
-                    <span>Déconnecter</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="deck-main">
-            <!-- Deck Grid -->
-            <div id="deck-grid-container" class="deck-grid-container">
-                <div id="deck-grid" class="deck-grid"></div>
-            </div>
-
-            <!-- Info Panel -->
-            <div class="info-panel" id="info-panel">
-                <div class="panel-header">
-                    <h3>Information</h3>
-                    <button class="close-panel" id="close-info">×</button>
-                </div>
-                <div class="panel-content">
-                    <p>Sélectionnez un bouton pour voir ses détails</p>
-                </div>
-            </div>
-        </main>
-
-        <!-- Share Panel -->
-        <div class="share-panel" id="share-panel">
-            <div class="share-header">
-                <h3>Partager votre Deck</h3>
-                <p>Scannez ce QR code ou utilisez l'URL pour accéder depuis un autre appareil</p>
-            </div>
-            
-            <div class="share-content">
-                <div class="qr-container">
-                    <div id="qr-code" class="qr-code"></div>
-                </div>
-                
-                <div class="url-container">
-                    <input type="text" id="share-url" class="share-url-input" readonly>
-                    <button id="copy-url" class="btn btn-icon" title="Copier l'URL">
-                        <span class="copy-icon">📋</span>
-                    </button>
-                </div>
-            </div>
-            
-            <button id="close-share" class="btn btn-secondary full-width">Fermer</button>
-        </div>
-
-        <!-- Quick Share Button -->
-        <button id="quick-share" class="quick-share-btn" title="Partager">
-            <span>📤</span>
-        </button>
-    </div>
-
-    <!-- PWA Install Prompt -->
-    <div id="install-prompt" class="install-prompt hidden">
-        <div class="install-content">
-            <h3>Installer Deck</h3>
-            <p>Ajoutez Deck à votre écran d'accueil pour un accès rapide</p>
-            <div class="install-actions">
-                <button id="install-pwa" class="btn btn-primary">Installer</button>
-                <button id="dismiss-install" class="btn btn-ghost">Plus tard</button>
-            </div>
-        </div>
+        <h2>Connecté avec succès!</h2>
+        <div id="buttons-grid"></div>
     </div>
 
     <!-- Scripts -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/init.js"></script>
+    <script>
+        console.log('Script started');
+        
+        // Simple timeout to hide loading splash
+        setTimeout(() => {
+            console.log('Hiding loading splash');
+            document.getElementById('loading-splash').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+        }, 1000);
+        
+        // Test button auth
+        const authBtn = document.getElementById('auth-btn');
+        authBtn.onclick = () => {
+            console.log('Auth clicked');
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('deck-container').classList.remove('hidden');
+        };
+        
+        console.log('Script loaded');
+    </script>
 </body>
 </html>
