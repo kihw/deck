@@ -2,10 +2,10 @@
   "name": "deck",
   "version": "1.1.0",
   "description": "Web-based Stream Deck application",
-  "main": "src/index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node main.js",
+    "dev": "nodemon main.js",
     "test": "jest",
     "lint": "eslint .",
     "build": "tsc"
