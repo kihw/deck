@@ -10,8 +10,7 @@ class DeckClient {
     
     this.initElements();
     this.initEvents();
-    this.setupPWA();
-    this.showLoadingSplash();
+    this.connect();
   }
 
   initElements() {
@@ -43,21 +42,16 @@ class DeckClient {
     this.shareUrlInput = document.getElementById('share-url');
     this.copyUrlBtn = document.getElementById('copy-url');
     this.closeShareBtn = document.getElementById('close-share');
-    
-    // Info panel elements
-    this.infoPanel = document.getElementById('info-panel');
-    this.closeInfoBtn = document.getElementById('close-info');
-    this.panelContent = this.infoPanel.querySelector('.panel-content');
-    
-    // PWA elements
-    this.installPrompt = document.getElementById('install-prompt');
-    this.installPwaBtn = document.getElementById('install-pwa');
-    this.dismissInstallBtn = document.getElementById('dismiss-install');
   }
 
   initEvents() {
-    // Loading splash
-    setTimeout(() => this.hideLoadingSplash(), 1000);
+    // Loading splash - remove after delay
+    setTimeout(() => {
+      if (this.loadingSplash) {
+        this.loadingSplash.classList.add('hidden');
+        this.authContainer.classList.remove('hidden');
+      }
+    }, 1000);
 
     // PIN input events
     this.pinInputs.forEach((input, index) => {
@@ -69,42 +63,28 @@ class DeckClient {
     this.authBtn.addEventListener('click', () => this.authenticate());
 
     // Disconnect event
-    this.disconnectBtn.addEventListener('click', () => this.disconnect());
+    if (this.disconnectBtn) {
+      this.disconnectBtn.addEventListener('click', () => this.disconnect());
+    }
 
     // Theme toggle
-    this.themeToggle.addEventListener('click', () => this.toggleTheme());
+    if (this.themeToggle) {
+      this.themeToggle.addEventListener('click', () => this.toggleTheme());
+    }
 
     // Share events
-    this.quickShareBtn.addEventListener('click', () => this.showSharePanel());
-    this.closeShareBtn.addEventListener('click', () => this.hideSharePanel());
-    this.copyUrlBtn.addEventListener('click', () => this.copyShareUrl());
-
-    // Info panel events
-    this.closeInfoBtn.addEventListener('click', () => this.hideInfoPanel());
-
-    // Click outside to close share panel
-    window.addEventListener('click', (e) => {
-      if (e.target === this.sharePanel) {
-        this.hideSharePanel();
-      }
-    });
-
-    // PWA install events
-    if (this.installPwaBtn) {
-      this.installPwaBtn.addEventListener('click', () => this.installPWA());
+    if (this.quickShareBtn) {
+      this.quickShareBtn.addEventListener('click', () => this.showSharePanel());
     }
-    if (this.dismissInstallBtn) {
-      this.dismissInstallBtn.addEventListener('click', () => this.dismissInstallPrompt());
+    if (this.closeShareBtn) {
+      this.closeShareBtn.addEventListener('click', () => this.hideSharePanel());
     }
-  }
+    if (this.copyUrlBtn) {
+      this.copyUrlBtn.addEventListener('click', () => this.copyShareUrl());
+    }
 
-  showLoadingSplash() {
-    this.loadingSplash.classList.remove('hidden');
-  }
-
-  hideLoadingSplash() {
-    this.loadingSplash.classList.add('hidden');
-    this.connect();
+    // Initialize theme
+    this.initTheme();
   }
 
   connect() {
@@ -263,7 +243,6 @@ class DeckClient {
     button.appendChild(label);
     
     button.addEventListener('click', () => this.triggerAction(config.id));
-    button.addEventListener('mousedown', () => this.showButtonInfo(config));
     
     this.deckGrid.appendChild(button);
     this.buttons.push(button);
@@ -314,6 +293,8 @@ class DeckClient {
   // Connection status
   updateConnectionStatus(status) {
     const statusEl = this.connectionStatus;
+    if (!statusEl) return;
+    
     const statusText = statusEl.querySelector('.status-text');
     
     statusEl.className = `connection-status ${status}`;
@@ -336,41 +317,30 @@ class DeckClient {
 
   // Share panel
   showSharePanel() {
-    this.sharePanel.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    if (this.sharePanel) {
+      this.sharePanel.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   hideSharePanel() {
-    this.sharePanel.classList.remove('active');
-    document.body.style.overflow = '';
+    if (this.sharePanel) {
+      this.sharePanel.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   }
 
   copyShareUrl() {
-    this.shareUrlInput.select();
-    document.execCommand('copy');
-    this.copyUrlBtn.querySelector('.copy-icon').textContent = '✓';
-    this.showNotification('URL copiée dans le presse-papier', 'success');
-    
-    setTimeout(() => {
-      this.copyUrlBtn.querySelector('.copy-icon').textContent = '📋';
-    }, 2000);
-  }
-
-  // Info panel
-  showButtonInfo(config) {
-    this.selectedButton = config;
-    this.panelContent.innerHTML = `
-      <h4>Bouton: ${config.label}</h4>
-      <p><strong>Type:</strong> ${this.capitalize(config.type)}</p>
-      <p><strong>Action:</strong> ${config.action}</p>
-      ${config.description ? `<p><strong>Description:</strong> ${config.description}</p>` : ''}
-    `;
-    this.infoPanel.style.display = 'flex';
-  }
-
-  hideInfoPanel() {
-    this.infoPanel.style.display = 'none';
-    this.selectedButton = null;
+    if (this.shareUrlInput) {
+      this.shareUrlInput.select();
+      document.execCommand('copy');
+      this.copyUrlBtn.querySelector('.copy-icon').textContent = '✓';
+      this.showNotification('URL copiée dans le presse-papier', 'success');
+      
+      setTimeout(() => {
+        this.copyUrlBtn.querySelector('.copy-icon').textContent = '📋';
+      }, 2000);
+    }
   }
 
   // Notifications
@@ -389,56 +359,15 @@ class DeckClient {
     }, 3000);
   }
 
-  // PWA functionality
-  setupPWA() {
-    let deferredPrompt;
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      this.showInstallPrompt();
-    });
-
-    this.deferredPrompt = deferredPrompt;
-  }
-
-  showInstallPrompt() {
-    this.installPrompt.classList.remove('hidden');
-  }
-
-  hideInstallPrompt() {
-    this.installPrompt.classList.add('hidden');
-  }
-
-  installPWA() {
-    if (this.deferredPrompt) {
-      this.deferredPrompt.prompt();
-      this.deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the PWA install prompt');
-        }
-        this.deferredPrompt = null;
-        this.hideInstallPrompt();
-      });
-    }
-  }
-
-  dismissInstallPrompt() {
-    this.hideInstallPrompt();
-  }
-
-  // Utility methods
-  capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
   // Initialize theme from localStorage
   initTheme() {
     const savedTheme = localStorage.getItem('deck-theme');
     if (savedTheme) {
       this.theme = savedTheme;
       document.documentElement.setAttribute('data-theme', this.theme);
-      this.themeToggle.querySelector('.theme-icon').textContent = this.theme === 'light' ? '🌙' : '☀️';
+      if (this.themeToggle) {
+        this.themeToggle.querySelector('.theme-icon').textContent = this.theme === 'light' ? '🌙' : '☀️';
+      }
     }
   }
 }
