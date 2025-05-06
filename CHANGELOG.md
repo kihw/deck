@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.0] - 2025-05-06
+
+### Added
+- Improved Icon Manager Plugin with comprehensive file management
+- Interactive Plugin Manager with CLI interface
+- System Monitor React Component for resource visualization
+- Enhanced main application entry point with better plugin handling
+- Run script for easier application startup
+- Directory setup scripts for icons
+- Support for user-uploaded custom icons
+
+### Changed
+- Switched start script to use new run.js for better initialization
+- Improved environment handling in application startup
+- Enhanced plugin loading with better dependency management
+- Updated package.json with new dependencies and scripts
+
+### Fixed
+- Directory structure issues for icons
+- Plugin initialization sequence
+- Improved error handling during application startup
+
 ## [1.1.2] - 2025-05-05
 
 ### Added
