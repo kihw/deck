@@ -146,7 +146,22 @@ sw.js.map
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# Project specific
-src/client/dist/icons/
-src/client/dist/screenshots/
-screenshots/
+# Specific files to remove
+src/client/client.js
+src/server/app.js
+src/server/routes/index.js
+src/server/websocket/index.js
+src/plugins/obs-control.ts
+src/plugins/ObsPlugin.ts
+src/server/config.js
+src/server/config/plugin.config.ts
+src/server/core/plugin-manager.ts
+src/server/models/plugin.model.ts
+src/server/plugins/PluginTypes.ts
+src/server/middlewares/error-handler.ts
+tests/plugin-manager.test.js
+tests/client/button.test.js
+tests/client/configuration.test.js
+tests/client/plugin.test.js
+tests/client/uiRenderer.test.ts
+tests/server/actions.test.ts
