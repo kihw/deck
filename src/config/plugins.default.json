@@ -21,14 +21,26 @@
       "exportFormat": "json"
     }
   },
+  "system-monitor-alerts": {
+    "enabled": true,
+    "settings": {
+      "cpuThreshold": 80,
+      "memoryThreshold": 90,
+      "diskThreshold": 85,
+      "networkThreshold": 70,
+      "alertChannelId": null,
+      "alertInterval": 300000,
+      "autoStart": false
+    }
+  },
   "discord-integration": {
     "enabled": false,
     "settings": {
       "autoConnect": false,
       "defaultChannel": null,
       "notificationPreferences": {
-        "systemAlerts": false,
-        "performanceWarnings": false
+        "systemAlerts": true,
+        "performanceWarnings": true
       }
     }
   },
