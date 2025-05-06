@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck - Dashboard</title>
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="header-logo-icon">⚡</span>
+                    <span>Deck</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle Sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🎮</span>
+                            <span class="nav-text">Stream Deck</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🎬</span>
+                            <span class="nav-text">OBS Control</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🎵</span>
+                            <span class="nav-text">Media</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">System</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📱</span>
+                            <span class="nav-text">Devices</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🔌</span>
+                            <span class="nav-text">Plugins</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="header-title">Dashboard</div>
+            </div>
+            <div class="header-actions">
+                <div class="theme-switch">
+                    <label>
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="header-user">
+                    <div class="user-avatar">D</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Status Cards -->
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">System Status</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="status-indicator success"></div>
+                            <div>
+                                <span class="font-medium">Server Online</span>
+                                <div class="text-sm text-muted">Running since 2h ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="status-indicator success"></div>
+                            <div>
+                                <span class="font-medium">OBS Connected</span>
+                                <div class="text-sm text-muted">Stream not active</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="status-indicator offline"></div>
+                            <div>
+                                <span class="font-medium">Spotify</span>
+                                <div class="text-sm text-muted">Not connected</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Active Connections</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-medium">Desktop</div>
+                            <span class="badge badge-success">Connected</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="font-medium">Mobile</div>
+                            <span class="badge badge-success">Connected</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="font-medium">Tablet</div>
+                            <span class="badge badge-info">Idle</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Resources</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">CPU Usage</span>
+                                <span class="text-sm text-muted">42%</span>
+                            </div>
+                            <div style="height: 8px; background-color: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 42%; height: 100%; background-color: var(--primary-color);"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Memory Usage</span>
+                                <span class="text-sm text-muted">68%</span>
+                            </div>
+                            <div style="height: 8px; background-color: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 68%; height: 100%; background-color: var(--warning);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Disk Space</span>
+                                <span class="text-sm text-muted">26%</span>
+                            </div>
+                            <div style="height: 8px; background-color: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
+                                <div style="width: 26%; height: 100%; background-color: var(--success);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="text-primary">📸</div>
+                            <div>
+                                <span class="font-medium">Screenshot Taken</span>
+                                <div class="text-sm text-muted">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="text-primary">🎬</div>
+                            <div>
+                                <span class="font-medium">OBS Scene Changed</span>
+                                <div class="text-sm text-muted">15 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="text-primary">🔊</div>
+                            <div>
+                                <span class="font-medium">Volume Adjusted</span>
+                                <div class="text-sm text-muted">32 minutes ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stream Deck Preview -->
+            <div class="card mt-6">
+                <div class="card-header">
+                    <h3 class="card-title">Stream Deck</h3>
+                    <button class="btn btn-primary btn-sm">Edit Layout</button>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1rem;">
+                        <div style="aspect-ratio: 1; background-color: var(--primary-color); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">🎬</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Start Stream</span>
+                        </div>
+                        <div style="aspect-ratio: 1; background-color: var(--primary-dark); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">🎥</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Camera</span>
+                        </div>
+                        <div style="aspect-ratio: 1; background-color: var(--success); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">🎙️</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Mic Toggle</span>
+                        </div>
+                        <div style="aspect-ratio: 1; background-color: var(--info); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">🎵</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Play/Pause</span>
+                        </div>
+                        <div style="aspect-ratio: 1; background-color: var(--warning); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">⏭️</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Next Track</span>
+                        </div>
+                        <div style="aspect-ratio: 1; background-color: var(--danger); border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                            <span style="font-size: 1.5rem;">📸</span>
+                            <span style="font-size: 0.875rem; margin-top: 0.5rem;">Screenshot</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Plugin Status -->
+            <div class="card mt-6">
+                <div class="card-header">
+                    <h3 class="card-title">Plugin Status</h3>
+                    <button class="btn btn-secondary btn-sm">Manage Plugins</button>
+                </div>
+                <div class="card-body">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 1px solid var(--border-color);">
+                                <th style="padding: 0.75rem 1rem;">Plugin</th>
+                                <th style="padding: 0.75rem 1rem;">Version</th>
+                                <th style="padding: 0.75rem 1rem;">Status</th>
+                                <th style="padding: 0.75rem 1rem;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 0.75rem 1rem;">OBS Control</td>
+                                <td style="padding: 0.75rem 1rem;">1.0.0</td>
+                                <td style="padding: 0.75rem 1rem;"><span class="badge badge-success">Active</span></td>
+                                <td style="padding: 0.75rem 1rem;">
+                                    <button class="btn btn-sm">Configure</button>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 0.75rem 1rem;">System Monitor</td>
+                                <td style="padding: 0.75rem 1rem;">1.2.0</td>
+                                <td style="padding: 0.75rem 1rem;"><span class="badge badge-success">Active</span></td>
+                                <td style="padding: 0.75rem 1rem;">
+                                    <button class="btn btn-sm">Configure</button>
+                                </td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 0.75rem 1rem;">Spotify Control</td>
+                                <td style="padding: 0.75rem 1rem;">0.8.2</td>
+                                <td style="padding: 0.75rem 1rem;"><span class="badge badge-warning">Needs Setup</span></td>
+                                <td style="padding: 0.75rem 1rem;">
+                                    <button class="btn btn-primary btn-sm">Setup</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem 1rem;">Discord Integration</td>
+                                <td style="padding: 0.75rem 1rem;">1.0.1</td>
+                                <td style="padding: 0.75rem 1rem;"><span class="badge badge-danger">Disabled</span></td>
+                                <td style="padding: 0.75rem 1rem;">
+                                    <button class="btn btn-primary btn-sm">Enable</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Mobile Navigation Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    
+    <!-- Scripts -->
+    <script>
+        // Toggle sidebar
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.dashboard').classList.toggle('sidebar-collapsed');
+        });
+        
+        // Toggle mobile sidebar
+        document.getElementById('sidebar-backdrop').addEventListener('click', function() {
+            document.querySelector('.dashboard').classList.remove('sidebar-visible');
+        });
+        
+        // Toggle theme
+        document.getElementById('theme-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('theme-toggle').checked = true;
+        }
+        
+        // Initialize responsive behavior
+        function handleResponsive() {
+            const dashboard = document.querySelector('.dashboard');
+            if (window.innerWidth < 992) {
+                dashboard.classList.remove('sidebar-collapsed');
+                // Add hamburger menu toggle in mobile view
+                const headerLeft = document.querySelector('.header-left');
+                if (!document.getElementById('mobile-menu-toggle')) {
+                    const mobileToggle = document.createElement('button');
+                    mobileToggle.id = 'mobile-menu-toggle';
+                    mobileToggle.className = 'btn btn-icon';
+                    mobileToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+                    mobileToggle.addEventListener('click', function() {
+                        dashboard.classList.toggle('sidebar-visible');
+                    });
+                    headerLeft.prepend(mobileToggle);
+                }
+            } else {
+                // Remove mobile toggle on larger screens
+                const mobileToggle = document.getElementById('mobile-menu-toggle');
+                if (mobileToggle) {
+                    mobileToggle.remove();
+                }
+                dashboard.classList.remove('sidebar-visible');
+            }
+        }
+        
+        // Initial call and event listener for resize
+        handleResponsive();
+        window.addEventListener('resize', handleResponsive);
+    </script>
+</body>
+</html>
