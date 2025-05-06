@@ -11,6 +11,16 @@
       }
     }
   },
+  "system-monitor-logger": {
+    "enabled": true,
+    "settings": {
+      "strategy": "file",
+      "logFrequency": 60000,
+      "logDirectory": "./logs/system-monitor",
+      "maxHistorySize": 1440,
+      "exportFormat": "json"
+    }
+  },
   "discord-integration": {
     "enabled": false,
     "settings": {
